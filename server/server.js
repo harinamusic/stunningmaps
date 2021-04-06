@@ -5,7 +5,7 @@ const path = require("path");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const { hash, compare } = require("./bc");
-const { addUser } = require("./db");
+const { addUser, userLogin } = require("./db");
 
 app.use(
     cookieSession({
@@ -13,7 +13,11 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
-// app.use(csurf());
+app.use(csurf());
+app.use(function (req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 //you should use compression in every server you ever create!!
 //it minimizes/compresses the size of every response we send
@@ -34,15 +38,15 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-// app.post("/register", (req, res) => {
-//     console.log(req.body);
-//     addUser
-//     res.send({ success: true });
-// });
-
 app.post("/register", (req, res) => {
+    if (req.session.userId) {
+        res.redirect("/");
+    }
     const { first, last, email, password } = req.body;
     const timestamp = new Date();
+    if (!first || !last || !email || !password) {
+        return res.json({ error: true });
+    }
     hash(password).then((hash) => {
         console.log("hashed password:", hash);
         addUser(first, last, email, hash, timestamp)
@@ -63,6 +67,50 @@ app.post("/register", (req, res) => {
                 res.json({ success: false });
             });
     });
+});
+
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    console.log(req.body.password, "password");
+    if (req.session.userId) {
+        res.redirect("/");
+    }
+    if (!email || !password) {
+        return res.json({ error: true });
+    }
+
+    userLogin(email)
+        .then((result) => {
+            const { password } = req.body;
+            compare(password, result.rows[0].password).then((match) => {
+                if (match) {
+                    req.session.userId = result.rows[0].id;
+                    // const user = result.rows[0].id;
+                    res.json({ success: true });
+                } else {
+                    res.json({
+                        success: false,
+                        error: true,
+                        alert:
+                            "Seems like you entered the wrong password. Please try again!",
+                    });
+                }
+            });
+        })
+        .catch((err) => {
+            console.log("wrong email", err);
+            res.json({
+                success: false,
+                error: true,
+                alert: "please enter a valid email adress!",
+            });
+        });
+});
+////////////////////////////////////////LOGOUT////////////////////////////////////
+app.get("/logout", (req, res) => {
+    req.session = null;
+
+    res.redirect("/login");
 });
 
 //NEVER DELETE THIS ROUTE

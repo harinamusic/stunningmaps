@@ -12,3 +12,6 @@ module.exports.addUser = (first, last, email, password) => {
     console.log(query, params);
     return db.query(query, params);
 };
+module.exports.userLogin = (email) => {
+    return db.query(`SELECT id, password FROM users WHERE email = $1`, [email]);
+};

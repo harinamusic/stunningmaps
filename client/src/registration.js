@@ -44,6 +44,8 @@ export default class Registration extends Component {
 
                 if (data.success === true) {
                     window.location.href = "/";
+                } else {
+                    this.setState({ error: true });
                 }
                 //TO DO
                 //if everything went well, redirect user to "/"
@@ -59,12 +61,14 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div>
-                <Link to="/login">Click me to go to login</Link>
-                <h1>This is our registration component</h1>
+            <div id="register">
+                <h2>Register here to enter the world of WONDER</h2>
                 {/* //has to be truthy in order to see it */}
                 {this.state.error && (
-                    <p className="error">Oops!! something went wrong</p>
+                    <p className="error">
+                        Oops!! something went wrong, please fill out all the
+                        fields!
+                    </p>
                 )}
                 {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
                 <input
@@ -92,6 +96,8 @@ export default class Registration extends Component {
                     onChange={(e) => this.handleChange(e)}
                 />
                 <button onClick={() => this.handleClick()}>register</button>
+                <br />
+                <Link to="/login">Click me to go to login</Link>
             </div>
         );
     }
