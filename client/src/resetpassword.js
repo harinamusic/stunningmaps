@@ -21,6 +21,7 @@ export default class ResetPassword extends Component {
     }
 
     resetUserPassword1(e) {
+        console.log("i clicked");
         e.preventDefault();
         axios
             .post("/resetpassword/start", this.state)
@@ -31,7 +32,7 @@ export default class ResetPassword extends Component {
                     this.setState({ step: 2 });
                 } else {
                     this.setState({
-                        error: data.message,
+                        error: true,
                     });
                 }
             })

@@ -114,7 +114,7 @@ app.post("/login", (req, res) => {
 
 app.post("/resetpassword/start", (req, res) => {
     const { email } = req.body;
-    console.log(req.body);
+    console.log(req.body, "this is req.body in resetpassword post");
     if (!email) {
         res.json({
             error: true,
@@ -122,7 +122,8 @@ app.post("/resetpassword/start", (req, res) => {
     }
     verifyEmail(email).then((result) => {
         let emailfromDB = result.rows[0].email;
-        if (emailfromDB == email) {
+        console.log(result.rows[0].email);
+        if (emailfromDB) {
             const code = cryptoRandomString({
                 length: 6,
             });
@@ -130,7 +131,7 @@ app.post("/resetpassword/start", (req, res) => {
             insertCode(code, email)
                 .then((result) => {
                     console.log(result);
-                    sendEmail(email, code, "Rest Password");
+                    sendEmail(email, code, "Reset Password");
                     res.json({
                         success: result,
                     });
