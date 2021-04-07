@@ -8,6 +8,7 @@ export default class ResetPassword extends Component {
         super(props);
         this.state = {
             step: 1,
+            error: false,
         };
     }
     handleChange(e) {
@@ -19,26 +20,44 @@ export default class ResetPassword extends Component {
         );
     }
 
-    // handleClick() {
-    //     // e.preventDefault();
-    //     console.log("clicked the button runs");
+    resetUserPassword1(e) {
+        e.preventDefault();
+        axios
+            .post("/resetpassword/start", this.state)
+            .then(({ data }) => {
+                console.log("data", data);
+
+                if (data.success) {
+                    this.setState({ step: 2 });
+                } else {
+                    this.setState({
+                        error: data.message,
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log("err in POST /resetpassword: ", err);
+            });
+    }
+    // resetUserPassword2(e) {
+    //     e.preventDefault();
 
     //     axios
-    //         .post("/login", this.state)
+    //         .post("/resetpassword/verify", this.state)
     //         .then(({ data }) => {
     //             console.log("data", data);
 
-    //             if (data.success === true) {
-    //                 window.location.href = "/";
+    //             if (data.success) {
+    //                 this.setState({ step: 3 });
     //             } else {
     //                 this.setState({
-    //                     error: true,
-    //                     alert: "something went wrong!",
+    //                     error: data.message,
     //                 });
     //             }
-
     //         })
-    //         .catch((err) => console.log("err in handleClick", err));
+    //         .catch(function (err) {
+    //             console.log("err in POST /resetpassword/verify: ", err);
+    //         });
     // }
 
     render() {
@@ -51,8 +70,26 @@ export default class ResetPassword extends Component {
                             To reset your password please enter your email
                             adress
                         </h2>
-                        <input required name="email" placeholder="email" />
-                        <button className="resetbttn">Reset Password</button>
+                        {this.state.error && (
+                            <p className="error">
+                                Oops!! something went wrong, please fill out all
+                                the fields!
+                            </p>
+                        )}
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            required
+                            name="email"
+                            type="text"
+                            placeholder="email"
+                        />
+                        <button
+                            onClick={(e) => this.resetUserPassword1(e)}
+                            type="submit"
+                            className="resetbttn"
+                        >
+                            Reset Password
+                        </button>
                     </div>
                 )}
                 {this.state.step == 2 && (
@@ -60,17 +97,41 @@ export default class ResetPassword extends Component {
                         <h2>
                             Please enter the 5 digit code you received via email
                         </h2>
-                        <input name="code" placeholder="code" />
+                        {this.state.error && (
+                            <p className="error">
+                                Oops!! something went wrong, please fill out all
+                                the fields!
+                            </p>
+                        )}
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            name="code"
+                            type="text"
+                            placeholder="code"
+                        />
                         <h2>Please enter your new password</h2>
-                        <input name="password" placeholder="new password" />
-                        <button className="resetbttn">Reset Password</button>
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            name="password"
+                            type="password"
+                            placeholder="new password"
+                        />
+                        <button
+                            onClick={(e) => this.resetUserPassword2(e)}
+                            type="submit"
+                            className="resetbttn"
+                        >
+                            Reset Password
+                        </button>
                     </div>
                 )}
                 {this.state.step == 3 && (
                     <div className="reset">
                         <h2>Success!</h2>
 
-                        <Link to="/login">Click me to go to Login</Link>
+                        <h2>
+                            You can now <Link to="/login">Login</Link>
+                        </h2>
                     </div>
                 )}
             </div>

@@ -5,7 +5,12 @@ const path = require("path");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const { hash, compare } = require("./bc");
-const { addUser, userLogin } = require("./db");
+
+const { sendEmail } = require("./ses");
+// const { upload } = require("./s3");
+const cryptoRandomString = require("crypto-random-string");
+
+const { addUser, userLogin, verifyEmail, insertCode } = require("./db");
 
 app.use(
     cookieSession({
@@ -105,6 +110,39 @@ app.post("/login", (req, res) => {
                 alert: "please enter a valid email adress!",
             });
         });
+});
+
+app.post("resetpassword/start", (req, res) => {
+    const { email } = req.body;
+    console.log(req.body);
+    if (!email) {
+        res.json({
+            error: true,
+        });
+    }
+    verifyEmail(email).then((result) => {
+        let emailfromDB = result.rows[0].email;
+        if (emailfromDB == email) {
+            const code = cryptoRandomString({
+                length: 6,
+            });
+
+            insertCode(code, email)
+                .then((result) => {
+                    console.log(result);
+                    sendEmail(email, code, "Rest Password");
+                    res.json({
+                        success: result,
+                    });
+                })
+                .catch((err) => {
+                    console.log("err in post resetpassword", err);
+                    res.json({
+                        error: true,
+                    });
+                });
+        }
+    });
 });
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {

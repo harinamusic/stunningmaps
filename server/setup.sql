@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS password_reset_codes;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -6,5 +7,12 @@ CREATE TABLE users (
     last VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE password_reset_codes(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR REFERENCES users(email),
+    code VARCHAR(6),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
