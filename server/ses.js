@@ -26,12 +26,12 @@ exports.sendEmail = (to, body, subject) =>
             Message: {
                 Body: {
                     Text: {
-                        Data:
-                            body,
+                        Data: body,
                     },
                 },
                 Subject: {
-                    Data: subject
+                    Data: subject,
+                },
             },
         })
         .promise()
