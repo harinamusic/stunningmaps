@@ -112,7 +112,7 @@ app.post("/login", (req, res) => {
         });
 });
 
-app.post("resetpassword/start", (req, res) => {
+app.post("/resetpassword/start", (req, res) => {
     const { email } = req.body;
     console.log(req.body);
     if (!email) {
