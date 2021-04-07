@@ -10,7 +10,14 @@ const { sendEmail } = require("./ses");
 // const { upload } = require("./s3");
 const cryptoRandomString = require("crypto-random-string");
 
-const { addUser, userLogin, verifyEmail, insertCode } = require("./db");
+const {
+    addUser,
+    userLogin,
+    verifyEmail,
+    insertCode,
+    getCode,
+    updatePassword,
+} = require("./db");
 
 app.use(
     cookieSession({
@@ -58,11 +65,7 @@ app.post("/register", (req, res) => {
             .then((data) => {
                 console.log("hashed password:", hash);
                 req.session.userId = data.rows[0].id;
-                // res.cookie("userId", data.rows[0].id);
-                // req.session.first = data.rows[0].first;
-                // req.session.last = data.rows[0].last;
-                // res.session.signatureId = null;
-                // res.redirect("/");
+
                 res.json({
                     success: true,
                 });
@@ -90,7 +93,7 @@ app.post("/login", (req, res) => {
             compare(password, result.rows[0].password).then((match) => {
                 if (match) {
                     req.session.userId = result.rows[0].id;
-                    // const user = result.rows[0].id;
+
                     res.json({ success: true });
                 } else {
                     res.json({
@@ -120,31 +123,73 @@ app.post("/resetpassword/start", (req, res) => {
             error: true,
         });
     }
-    verifyEmail(email).then((result) => {
-        let emailfromDB = result.rows[0].email;
-        console.log(result.rows[0].email);
-        if (emailfromDB) {
-            const code = cryptoRandomString({
-                length: 6,
-            });
-
-            insertCode(code, email)
-                .then((result) => {
-                    console.log(result);
-                    sendEmail(email, code, "Reset Password");
-                    res.json({
-                        success: result,
-                    });
-                })
-                .catch((err) => {
-                    console.log("err in post resetpassword", err);
-                    res.json({
-                        error: true,
-                    });
+    verifyEmail(email)
+        .then((result) => {
+            let emailfromDB = result.rows[0].email;
+            console.log(result.rows[0].email);
+            if (emailfromDB) {
+                const code = cryptoRandomString({
+                    length: 6,
                 });
-        }
-    });
+
+                insertCode(code, email)
+                    .then((result) => {
+                        console.log(result, "this is mi result in insertCode");
+                        sendEmail(email, code, "Reset Password");
+                        res.json({
+                            success: result,
+                        });
+                    })
+                    .catch((err) => {
+                        console.log("err in post resetpassword", err);
+                        res.json({
+                            error: true,
+                        });
+                    });
+            }
+        })
+        .catch((err) => {
+            console.log("could not find the email: ", err);
+            res.json({
+                error: true,
+            });
+        });
 });
+app.post("/resetpassword/verify", (req, res) => {
+    const { code, email, password } = req.body;
+    console.log("email in resetpassword/verify: ", email);
+    if (!code || !password) {
+        res.json({
+            error: true,
+        });
+    }
+    getCode(email)
+        .then((result) => {
+            console.log("result in getCode: ", result);
+            if (result.rows[0].code !== code) {
+                res.json({
+                    error: true,
+                });
+            }
+            if (result.rows[0].code === code) {
+                hash(password).then((hash) => {
+                    updatePassword(hash, email)
+                        .then((results) => {
+                            res.json({
+                                success: results,
+                            });
+                        })
+                        .catch((err) => {
+                            console.log("err updating password: ", err);
+                        });
+                });
+            }
+        })
+        .catch((err) => {
+            console.log("err in getting email in reset password: ", err);
+        });
+});
+
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;

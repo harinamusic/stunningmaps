@@ -40,26 +40,26 @@ export default class ResetPassword extends Component {
                 console.log("err in POST /resetpassword: ", err);
             });
     }
-    // resetUserPassword2(e) {
-    //     e.preventDefault();
+    resetUserPassword2(e) {
+        e.preventDefault();
 
-    //     axios
-    //         .post("/resetpassword/verify", this.state)
-    //         .then(({ data }) => {
-    //             console.log("data", data);
+        axios
+            .post("/resetpassword/verify", this.state)
+            .then(({ data }) => {
+                console.log("data", data);
 
-    //             if (data.success) {
-    //                 this.setState({ step: 3 });
-    //             } else {
-    //                 this.setState({
-    //                     error: data.message,
-    //                 });
-    //             }
-    //         })
-    //         .catch(function (err) {
-    //             console.log("err in POST /resetpassword/verify: ", err);
-    //         });
-    // }
+                if (data.success) {
+                    this.setState({ step: 3 });
+                } else {
+                    this.setState({
+                        error: data.message,
+                    });
+                }
+            })
+            .catch(function (err) {
+                console.log("err in POST /resetpassword/verify: ", err);
+            });
+    }
 
     render() {
         return (

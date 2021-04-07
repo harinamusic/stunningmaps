@@ -27,16 +27,16 @@ module.exports.insertCode = function (code, email) {
     );
 };
 
-// module.exports.getCode = function (email) {
-//     return db.query(
-//         `SELECT * FROM password_reset_codes WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' AND email = $1 ORDER BY created_at DESC LIMIT 1`,
-//         [email]
-//     );
-// };
+module.exports.getCode = function (email) {
+    return db.query(
+        `SELECT * FROM password_reset_codes WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes' AND email = $1 ORDER BY created_at DESC LIMIT 1`,
+        [email]
+    );
+};
 
-// module.exports.updatePassword = function (newPassword, email) {
-//     return db.query(`UPDATE users SET password = $1 WHERE email = $2`, [
-//         newPassword,
-//         email,
-//     ]);
-// };
+module.exports.updatePassword = function (newPassword, email) {
+    return db.query(`UPDATE users SET password = $1 WHERE email = $2`, [
+        newPassword,
+        email,
+    ]);
+};
