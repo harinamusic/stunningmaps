@@ -1,10 +1,8 @@
-//component we see when we registered or logged in => shows Logo and Profile picture
-
 import { Component } from "react";
-import { Logo } from "./logo.js";
+import axios from "./axios";
+import Logo from "./logo.js";
 import { Uploader } from "./uploader";
-import axios from "./utilities/axios";
-import ProfilePic from "./profile-pic";
+import { ProfilePic } from "./profile-pic";
 
 export default class App extends Component {
     constructor(props) {
@@ -19,34 +17,75 @@ export default class App extends Component {
         console.log("app mounted");
 
         axios.get("/user").then((res) => {
-            console.log("data fetched");
-            console.log(res.data);
+            console.log("component mounted");
+            console.log(
+                "this is my response data after the app component mounted, it contains the user information from GET /user route",
+                res.data
+            );
             this.setState({ user: res.data });
 
-            console.log("updated state", this.state);
+            console.log(
+                "updated state => added to my user object from this.state all the user information",
+                this.state
+            );
         });
     }
 
-    // setProfilePic(profilePic) {
-    //     this.setstate;
-    // } =>>>>>>>>you need to render this down below
-
     showUploader() {
         this.setState({ uploaderVisible: true });
+        console.log("i clicked the pic");
+    }
+    hideUploader() {
+        this.setState({
+            uploaderVisible: false,
+        });
+        console.log("i clicked the x");
+    }
+
+    addProfilePic(newPic) {
+        this.setState((prevState) => {
+            console.log("this was my prev state", prevState);
+            return {
+                user: {
+                    ...prevState.user,
+                    profile_pic: newPic,
+                },
+                uploaderVisible: false,
+            };
+        });
+        console.log(
+            "new user obj with new pic after setProfilePic ran",
+            this.state.user
+        );
     }
     render() {
         return (
-            <section id={"app"} onClick={() => this.showUploader}>
-                {/* //arrow function so "this" is still defined => alternative way is binding*/}
-                <Logo />
+            <div>
+                <div>
+                    <header>
+                        <h1>WONDER</h1>
+                        <Logo />
+                        <a id="logout" href="/logout">
+                            {" "}
+                            Log out
+                        </a>
+                    </header>
+                </div>
+
                 <ProfilePic
-                    firstName={this.state.user.firstName}
-                    lastname={this.state.user.lastName}
-                    profilePic={this.state.user.profilePic}
+                    // {...this.state.user}
+                    first={this.state.user.first}
+                    last={this.state.user.last}
+                    profile_pic={this.state.user.profile_pic}
+                    showUploader={() => this.showUploader()}
                 />
-                {this.state.uploaderVisible && <Uploader />}
-                {/* //if uploaderVisibleis false => Uploader wont show */}
-            </section>
+                {this.state.uploaderVisible && (
+                    <Uploader
+                        hideUploader={() => this.hideUploader()}
+                        addProfilePic={(newPic) => this.addProfilePic(newPic)}
+                    />
+                )}
+            </div>
         );
     }
 }

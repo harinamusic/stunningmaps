@@ -85,3 +85,28 @@ h2 {
     width: 130px;
     border-radius: 20px;
 }
+.app {
+    display: flex;
+    flex-direction: column;
+}
+
+.profilepic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#profilepic {
+    height: 300px;
+    width: 300px;
+    object-fit: contain;
+    /* justify-self: end; */
+}
+#pagelogo {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 10px;
+    object-fit: contain;
+    top: 0;
+}

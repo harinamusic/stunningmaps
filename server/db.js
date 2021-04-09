@@ -40,3 +40,14 @@ module.exports.updatePassword = function (newPassword, email) {
         email,
     ]);
 };
+
+module.exports.getUserData = function (id) {
+    return db.query(`SELECT * FROM users WHERE id = $1`, [id]);
+};
+
+module.exports.addProfilePic = function (userId, url) {
+    return db.query(
+        `UPDATE users SET profile_pic = $2 WHERE id = $1 RETURNING profile_pic`,
+        [userId, url]
+    );
+};

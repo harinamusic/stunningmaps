@@ -1,13 +1,38 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
+
 const path = require("path");
 const cookieSession = require("cookie-session");
 const csurf = require("csurf");
 const { hash, compare } = require("./bc");
+const { upload } = require("./s3");
+
+/////////////////////////////MULTER//** Do not touch this code **//////////////////////////////
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
+///////////////////////////////////** Do not touch this code **////////////////////////////
 
 const { sendEmail } = require("./ses");
-// const { upload } = require("./s3");
+
 const cryptoRandomString = require("crypto-random-string");
 
 const {
@@ -17,6 +42,8 @@ const {
     insertCode,
     getCode,
     updatePassword,
+    getUserData,
+    addProfilePic,
 } = require("./db");
 
 app.use(
@@ -40,7 +67,7 @@ app.use(express.static("./public"));
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-///////////////////GET ROUTE FOR THE REGISTRATION////////////////////
+///////////////////GET ROUTE FOR THE REGISTRATION/WELCOME PAGE////////////////////
 ///REQUIRE COOKIE SESSION MIDDLEWARE FIRST
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
@@ -49,7 +76,7 @@ app.get("/welcome", (req, res) => {
         res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
 });
-
+////////////////////////////////////REGISTRATION///////////////////////////
 app.post("/register", (req, res) => {
     if (req.session.userId) {
         res.redirect("/");
@@ -76,7 +103,7 @@ app.post("/register", (req, res) => {
             });
     });
 });
-
+///////////////////////////////////////LOGIN///////////////////////////////////
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
     console.log(req.body.password, "password");
@@ -115,6 +142,7 @@ app.post("/login", (req, res) => {
         });
 });
 
+/////////////////////////////////////UPDATE PASSWORD/////////////////////////////////////
 app.post("/resetpassword/start", (req, res) => {
     const { email } = req.body;
     console.log(req.body, "this is req.body in resetpassword post");
@@ -189,7 +217,41 @@ app.post("/resetpassword/verify", (req, res) => {
             console.log("err in getting email in reset password: ", err);
         });
 });
+/////////////////////////////////////////APP//////////////////////////////////////
 
+///////////GET USER INFO/////////////
+
+app.get("/user", (req, res) => {
+    getUserData(req.session.userId).then((result) => {
+        console.log("Result in get /user: ", result);
+        res.json(result.rows[0]);
+    });
+});
+//////////////////////POST UPLOADER//////////////////
+app.post("/upload", uploader.single("file"), upload, (req, res) => {
+    const { userId } = req.session;
+
+    let url = "https://s3.amazonaws.com/kathisimageboard/" + req.file.filename;
+
+    if (req.file) {
+        addProfilePic(userId, url)
+            .then((result) => {
+                console.log("Result in post upload: ", result);
+                res.json({
+                    success: true,
+                    result,
+                });
+            })
+            .catch((err) => {
+                console.log("Error in post upload", err);
+            });
+    } else {
+        res.json({
+            success: false,
+            error: true,
+        });
+    }
+});
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;
