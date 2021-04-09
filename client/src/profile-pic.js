@@ -17,19 +17,13 @@
 
 export function ProfilePic(props) {
     return (
-        <div className="profilepic">
-            <h2>
-                Update your profile picture below<br></br>
-            </h2>
-            <h3>
-                {props.first} {props.last}
-            </h3>
+        <section>
             <img
-                id="profilepic"
+                className={`profilepic ${props.style}`}
                 src={props.profile_pic || "/profilepic-static.jpg"}
-                alt={`${props.first} ${props.last}`}
+                // alt={`${props.first} ${props.last}`}
                 onClick={() => props.showUploader()}
             />
-        </div>
+        </section>
     );
 }

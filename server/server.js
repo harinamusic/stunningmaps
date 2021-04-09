@@ -44,6 +44,7 @@ const {
     updatePassword,
     getUserData,
     addProfilePic,
+    // writeBio,
 } = require("./db");
 
 app.use(

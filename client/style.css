@@ -2,6 +2,7 @@ body {
     margin: 0;
     background-color: #ffcbf2;
     margin-top: 0;
+    width: 100%;
 }
 header {
     background-color: #c0fdff;
@@ -90,23 +91,42 @@ h2 {
     flex-direction: column;
 }
 
-.profilepic {
+/* .profilepic {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-#profilepic {
-    height: 300px;
-    width: 300px;
-    object-fit: contain;
-    /* justify-self: end; */
-}
+} */
+
 #pagelogo {
     width: 200px;
     height: 200px;
     position: absolute;
-    left: 10px;
+    left: 20px;
     object-fit: contain;
     top: 0;
+}
+
+.bigpic {
+    height: 300px;
+    border: dotted #deaaff 5px;
+    border-radius: 80%;
+}
+.minipic {
+    width: 180px;
+
+    position: absolute;
+    right: 20px;
+    object-fit: contain;
+    top: 25px;
+    border: dotted #deaaff 5px;
+    border-radius: 80%;
+}
+.userprofile {
+    background-color: #ffcbf2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
 }

@@ -3,6 +3,8 @@ import axios from "./axios";
 import Logo from "./logo.js";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
+import { Profile } from "./profile";
+import BioEditor from "./bio-editor";
 
 export default class App extends Component {
     constructor(props) {
@@ -10,6 +12,7 @@ export default class App extends Component {
 
         this.state = {
             user: {},
+
             uploaderVisible: false,
         };
     }
@@ -23,6 +26,7 @@ export default class App extends Component {
                 res.data
             );
             this.setState({ user: res.data });
+            console.log("this is my user id", this.state.user.id);
 
             console.log(
                 "updated state => added to my user object from this.state all the user information",
@@ -78,7 +82,19 @@ export default class App extends Component {
                     last={this.state.user.last}
                     profile_pic={this.state.user.profile_pic}
                     showUploader={() => this.showUploader()}
+                    style={"minipic"}
                 />
+                <Profile
+                    // {...this.state.user}
+                    id={this.state.user.id}
+                    first={this.state.user.first}
+                    last={this.state.user.last}
+                    profile_pic={this.state.user.profile_pic}
+                    showUploader={() => this.showUploader()}
+                    // bio={this.state.bio}
+                    // setBio={this.setBio}
+                />
+
                 {this.state.uploaderVisible && (
                     <Uploader
                         hideUploader={() => this.hideUploader()}
