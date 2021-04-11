@@ -1,15 +1,112 @@
 // import axios from "./axios";
-import { Component } from "react";
+// import { Component } from "react";
 
-export default class BioEditor extends Component {
+// export default class BioEditor extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             error: false,
+//             // showEditor: false,
+//         };
+//     }
+//     render() {
+//         return <h1>hi there i am your bio</h1>;
+//     }
+// }
+import { Component } from "react";
+import axios from "./axios";
+
+export class BioEditor extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             error: false,
-            // showEditor: false,
+            editMode: false,
+            // You may want to set some defaults here
         };
     }
-    render() {
-        return <h1>hi there i am your bio</h1>;
+
+    toggleEditMode() {
+        this.setState({ editMode: true });
+        // To toggle the editMode state variable.
     }
+    addButton() {
+        console.log("i clicked add bio");
+        return (
+            <div>
+                <button onClick={() => this.toggleEditMode()}>Add Bio</button>
+            </div>
+        );
+    }
+
+    editButton() {
+        return (
+            <div>
+                {this.props.bio}
+
+                <button onClick={() => this.toggleEditMode()}>Edit Bio</button>
+            </div>
+        );
+    }
+
+    handleBioChange(e) {
+        this.setState(
+            {
+                [e.target.name]: e.target.value,
+            },
+            () => console.log("this.state", this.state)
+        );
+        // To keep track of the bio the user types
+    }
+
+    submitBio() {
+        console.log(
+            "i submitted the bio, this.state in bioeditor:",
+            this.state
+        );
+        axios
+            .post("/bio", this.state)
+            .then((res) => {
+                console.log("res in /bio", res);
+                this.props.setBio(res.data.bio);
+                this.setState({ editMode: false });
+            })
+            .catch((err) => console.log("err in post /bio", err));
+        // 1. Post the new bio the user typed (you should read it from this.state.draft)
+        // 2. Set the new bio in the state of App
+    }
+
+    render() {
+        const { bio } = this.props;
+        const button = bio ? this.editButton() : this.addButton();
+        return (
+            <div className="bioeditor">
+                <h1>Your Bio</h1>
+
+                {this.state.editMode && (
+                    <div>
+                        <textarea
+                            onChange={(e) => this.handleBioChange(e)}
+                            className="text"
+                            name="bio"
+                            defaultValue={this.props.bio}
+                        ></textarea>
+                        <button onClick={() => this.submitBio()}>Save</button>
+                    </div>
+                )}
+                <div>{button}</div>
+            </div>
+        );
+    }
+    // return (
+    //     <section id={"bio-editor"}>
+    //         {/*
+    //          Lots of rendering logic here, depending on whether:
+    //          1. You are in edit mode or not
+    //          2. If you are not in edit mode: whether a bio already exists
+    //          */}
+    //     </section>
+    // );
+    //     }
 }

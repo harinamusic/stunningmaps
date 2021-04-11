@@ -4,7 +4,7 @@ import Logo from "./logo.js";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
 import { Profile } from "./profile";
-import BioEditor from "./bio-editor";
+import { BioEditor } from "./bio-editor";
 
 export default class App extends Component {
     constructor(props) {
@@ -62,6 +62,16 @@ export default class App extends Component {
             this.state.user
         );
     }
+    setBio(text) {
+        this.setState((prevState) => {
+            return {
+                user: {
+                    ...prevState.user,
+                    bio: text,
+                },
+            };
+        });
+    }
     render() {
         return (
             <div>
@@ -90,9 +100,9 @@ export default class App extends Component {
                     first={this.state.user.first}
                     last={this.state.user.last}
                     profile_pic={this.state.user.profile_pic}
+                    bio={this.state.user.bio}
                     showUploader={() => this.showUploader()}
-                    // bio={this.state.bio}
-                    // setBio={this.setBio}
+                    setBio={(text) => this.setBio(text)}
                 />
 
                 {this.state.uploaderVisible && (

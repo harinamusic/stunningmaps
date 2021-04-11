@@ -44,7 +44,7 @@ const {
     updatePassword,
     getUserData,
     addProfilePic,
-    // writeBio,
+    writeBio,
 } = require("./db");
 
 app.use(
@@ -252,6 +252,18 @@ app.post("/upload", uploader.single("file"), upload, (req, res) => {
             error: true,
         });
     }
+});
+//////////////////////////////////BIO////////////////////////////////////
+
+app.post("/bio", (req, res) => {
+    writeBio(req.session.userId, req.body.bio)
+        .then((result) => {
+            console.log("Result in /bio: ", result.rows[0]);
+            res.json(result.rows[0]);
+        })
+        .catch((err) => {
+            console.log("Error in post/bio: ", err);
+        });
 });
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {

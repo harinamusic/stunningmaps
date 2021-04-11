@@ -51,9 +51,9 @@ module.exports.addProfilePic = function (userId, url) {
         [userId, url]
     );
 };
-module.exports.writeBio = function (userId, bioText) {
+module.exports.writeBio = function (userId, bio) {
     return db.query(`UPDATE users SET bio = $2 WHERE id = $1 RETURNING bio`, [
         userId,
-        bioText,
+        bio,
     ]);
 };

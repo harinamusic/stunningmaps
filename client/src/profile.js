@@ -1,5 +1,5 @@
 import { Component } from "react";
-import BioEditor from "./bio-editor";
+import { BioEditor } from "./bio-editor";
 import { ProfilePic } from "./profile-pic";
 
 export class Profile extends Component {
@@ -24,12 +24,16 @@ export class Profile extends Component {
                         first={this.props.first}
                         last={this.props.last}
                         profile_pic={this.props.profile_pic}
+                        bio={this.props.bio}
                         // onClick={this.props.showUploader}
                         showUploader={() => this.props.showUploader()}
                         style={"bigpic"}
                     />
-                    <BioEditor />
-                    {/* <BioEditor bio={this.props.bio} setBio={this.props.setBio} /> */}
+
+                    <BioEditor
+                        bio={this.props.bio}
+                        setBio={this.props.setBio}
+                    />
                 </div>
             </div>
         );
