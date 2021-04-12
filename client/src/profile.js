@@ -29,11 +29,12 @@ export class Profile extends Component {
                         showUploader={() => this.props.showUploader()}
                         style={"bigpic"}
                     />
-
-                    <BioEditor
-                        bio={this.props.bio}
-                        setBio={this.props.setBio}
-                    />
+                    <div className="biotext">
+                        <BioEditor
+                            bio={this.props.bio}
+                            setBio={this.props.setBio}
+                        />
+                    </div>
                 </div>
             </div>
         );

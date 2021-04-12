@@ -106,22 +106,34 @@ h2 {
     object-fit: contain;
     top: 0;
 }
-
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 .bigpic {
     height: 300px;
+    width: 300px;
+    object-fit: cover;
     border: dotted #deaaff 5px;
     border-radius: 80%;
 }
 .minipic {
     width: 180px;
-
+    height: 100px;
     position: absolute;
     right: 20px;
-    object-fit: contain;
+    object-fit: cover;
     top: 25px;
     border: dotted #deaaff 5px;
     border-radius: 80%;
 }
+.usernames {
+    position: absolute;
+    right: 45px;
+    top: 130px;
+}
+
 .userprofile {
     background-color: #ffcbf2;
     display: flex;
@@ -130,8 +142,39 @@ h2 {
     display: flex;
     align-items: center;
 }
+.bio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #c0fdff;
+    margin-top: 50px;
+    padding: 20px;
+    border-radius: 20px;
+    border: dotted #deaaff 3px;
+}
 .bioeditor {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #c0fdff;
+}
+.text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 2px;
+    border: dotted #deaaff 3px;
+}
+button {
+    background-color: #deaaff;
+}
+.biotexthere {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#backtoprofile {
+    position: absolute;
+    top: 16%;
 }

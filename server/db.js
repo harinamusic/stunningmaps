@@ -57,3 +57,19 @@ module.exports.writeBio = function (userId, bio) {
         bio,
     ]);
 };
+
+// module.exports.getOtherUserInfo = function (
+//     userId,
+//     first,
+//     last,
+//     profile_pic,
+//     bio
+// ) {
+//     return db.query(`SELECT * FROM users WHERE id = $1`, [
+//         userId,
+//         first,
+//         last,
+//         profile_pic,
+//         bio,
+//     ]);
+// };

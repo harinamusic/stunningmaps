@@ -18,12 +18,17 @@
 export function ProfilePic(props) {
     return (
         <section>
-            <img
-                className={`profilepic ${props.style}`}
-                src={props.profile_pic || "/profilepic-static.jpg"}
-                // alt={`${props.first} ${props.last}`}
-                onClick={() => props.showUploader()}
-            />
+            <div>
+                <img
+                    className={`profilepic ${props.style}`}
+                    src={props.profile_pic || "/profilepic-static.jpg"}
+                    // alt={`${props.first} ${props.last}`}
+                    onClick={() => props.showUploader()}
+                />
+                <p className="usernames">
+                    {props.first} {props.last}
+                </p>
+            </div>
         </section>
     );
 }

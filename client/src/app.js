@@ -5,6 +5,8 @@ import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
 import { Profile } from "./profile";
 import { BioEditor } from "./bio-editor";
+import { OtherProfile } from "./otherprofile";
+import { BrowserRouter, Route } from "react-router-dom";
 
 export default class App extends Component {
     constructor(props) {
@@ -94,16 +96,41 @@ export default class App extends Component {
                     showUploader={() => this.showUploader()}
                     style={"minipic"}
                 />
-                <Profile
-                    // {...this.state.user}
-                    id={this.state.user.id}
-                    first={this.state.user.first}
-                    last={this.state.user.last}
-                    profile_pic={this.state.user.profile_pic}
-                    bio={this.state.user.bio}
-                    showUploader={() => this.showUploader()}
-                    setBio={(text) => this.setBio(text)}
-                />
+                <BrowserRouter>
+                    <div>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => {
+                                return (
+                                    <Profile
+                                        // {...this.state.user}
+                                        id={this.state.user.id}
+                                        first={this.state.user.first}
+                                        last={this.state.user.last}
+                                        profile_pic={
+                                            this.state.user.profile_pic
+                                        }
+                                        bio={this.state.user.bio}
+                                        showUploader={() => this.showUploader()}
+                                        setBio={(text) => this.setBio(text)}
+                                    />
+                                );
+                            }}
+                        />
+                        <Route
+                            path="/user/:id"
+                            render={(props) => (
+                                <OtherProfile
+                                    key={props.match.url}
+                                    match={props.match}
+                                    history={props.history}
+                                    style={"bigpic"}
+                                />
+                            )}
+                        />
+                    </div>
+                </BrowserRouter>
 
                 {this.state.uploaderVisible && (
                     <Uploader

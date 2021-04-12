@@ -265,6 +265,26 @@ app.post("/bio", (req, res) => {
             console.log("Error in post/bio: ", err);
         });
 });
+/////////////////////////////////////GET OTHER USER INFO//////////////////////////
+app.get("/user/:id.json", (req, res) => {
+    const { userId } = req.session;
+    console.log(userId, "this is the users id i am wqanting");
+    if (userId == req.params.id) {
+        res.json({ redirectToProfile: true });
+    } else {
+        getUserData(req.params.id)
+            .then((result) => {
+                console.log("Result  in /user: ", result);
+                console.log("Result. rows   in /user: ", result.rows[0]);
+                console.log("id   in /user: ", result.rows[0].id);
+                console.log("req.params.id /user: ", req.params.id);
+                res.json(result.rows[0]);
+            })
+            .catch((err) => {
+                console.log("Error in api/user/:id: ", err);
+            });
+    }
+});
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;

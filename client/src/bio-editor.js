@@ -23,18 +23,20 @@ export class BioEditor extends Component {
         this.state = {
             error: false,
             editMode: false,
+
             // You may want to set some defaults here
         };
     }
 
     toggleEditMode() {
         this.setState({ editMode: true });
+
         // To toggle the editMode state variable.
     }
     addButton() {
         console.log("i clicked add bio");
         return (
-            <div>
+            <div className="biotexthere">
                 <button onClick={() => this.toggleEditMode()}>Add Bio</button>
             </div>
         );
@@ -42,7 +44,7 @@ export class BioEditor extends Component {
 
     editButton() {
         return (
-            <div>
+            <div className="biotexthere">
                 {this.props.bio}
 
                 <button onClick={() => this.toggleEditMode()}>Edit Bio</button>
@@ -78,14 +80,24 @@ export class BioEditor extends Component {
     }
 
     render() {
+        var button;
         const { bio } = this.props;
-        const button = bio ? this.editButton() : this.addButton();
+        if (bio) {
+            button = this.editButton();
+        } else {
+            button = this.addButton();
+        }
+        if (this.state.editMode) {
+            button = undefined;
+        }
+        // const { bio } = this.props;
+        // const button = bio ? this.editButton() : this.addButton();
+        console.log(this.props, "is this my bio?");
         return (
-            <div className="bioeditor">
-                <h1>Your Bio</h1>
-
+            <div className="bio">
+                <h2>Your Bio</h2>
                 {this.state.editMode && (
-                    <div>
+                    <div className="bioeditor">
                         <textarea
                             onChange={(e) => this.handleBioChange(e)}
                             className="text"
