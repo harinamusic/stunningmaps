@@ -11,6 +11,9 @@ export class Profile extends Component {
     render() {
         return (
             <div className="userprofile">
+                <a className="findpeoplelink" id="logout" href="/users">
+                    Find People to connect with
+                </a>
                 <h1>
                     Welcome to WONDER {this.props.first} {this.props.last}
                 </h1>

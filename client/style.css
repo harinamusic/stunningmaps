@@ -131,7 +131,7 @@ section {
 .usernames {
     position: absolute;
     right: 45px;
-    top: 130px;
+    top: 140px;
 }
 
 .userprofile {
@@ -176,5 +176,29 @@ button {
 
 #backtoprofile {
     position: absolute;
-    top: 16%;
+    top: 17%;
+}
+
+.usersearch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.userdivinsearch {
+    border: cornsilk dotted 3px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+#profilepic {
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+}
+.findpeoplelink {
+    position: absolute;
+    top: 17%;
 }

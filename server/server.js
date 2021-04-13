@@ -45,7 +45,10 @@ const {
     getUserData,
     addProfilePic,
     writeBio,
+    lastRegisteredUsers,
+    matchingUsers,
 } = require("./db");
+const { response } = require("express");
 
 app.use(
     cookieSession({
@@ -285,6 +288,30 @@ app.get("/user/:id.json", (req, res) => {
             });
     }
 });
+/////////////////////////////////////FIND PEOPLE///////////////////////////////
+
+app.get("/lastthreeusers", (req, res) => {
+    lastRegisteredUsers()
+        .then((result) => {
+            // console.log("response in /lastusers ", result);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in /lastusers ", err);
+        });
+});
+
+// app.get("/listusers/:listusers", (req, res) => {
+//     matchingUsers(req.params.listusers)
+//         .then((result) => {
+//             console.log("result in /listusers: ", result);
+//             res.json(result.rows);
+//         })
+//         .catch((err) => {
+//             console.log("err in /listusers: ", err);
+//         });
+// });
+
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;

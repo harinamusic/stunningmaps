@@ -58,6 +58,14 @@ module.exports.writeBio = function (userId, bio) {
     ]);
 };
 
+module.exports.lastRegisteredUsers = function () {
+    return db.query(`SELECT * FROM users ORDER BY id DESC LIMIT 3`);
+};
+
+module.exports.matchingUsers = function (val) {
+    return db.query(`SELECT * FROM users WHERE first ILIKE $1`, [val + "%"]);
+};
+
 // module.exports.getOtherUserInfo = function (
 //     userId,
 //     first,

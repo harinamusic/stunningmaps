@@ -4,9 +4,10 @@ import Logo from "./logo.js";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
 import { Profile } from "./profile";
-import { BioEditor } from "./bio-editor";
+// import { BioEditor } from "./bio-editor";
 import { OtherProfile } from "./otherprofile";
 import { BrowserRouter, Route } from "react-router-dom";
+import FindPeople from "./findpeople";
 
 export default class App extends Component {
     constructor(props) {
@@ -129,6 +130,7 @@ export default class App extends Component {
                                 />
                             )}
                         />
+                        <Route path="/users" render={() => <FindPeople />} />
                     </div>
                 </BrowserRouter>
 
