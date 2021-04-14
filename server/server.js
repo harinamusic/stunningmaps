@@ -277,10 +277,10 @@ app.get("/user/:id.json", (req, res) => {
     } else {
         getUserData(req.params.id)
             .then((result) => {
-                console.log("Result  in /user: ", result);
-                console.log("Result. rows   in /user: ", result.rows[0]);
-                console.log("id   in /user: ", result.rows[0].id);
-                console.log("req.params.id /user: ", req.params.id);
+                // console.log("Result  in /user: ", result);
+                // console.log("Result. rows   in /user: ", result.rows[0]);
+                // console.log("id   in /user: ", result.rows[0].id);
+                // console.log("req.params.id /user: ", req.params.id);
                 res.json(result.rows[0]);
             })
             .catch((err) => {
@@ -301,16 +301,17 @@ app.get("/lastthreeusers", (req, res) => {
         });
 });
 
-// app.get("/listusers/:listusers", (req, res) => {
-//     matchingUsers(req.params.listusers)
-//         .then((result) => {
-//             console.log("result in /listusers: ", result);
-//             res.json(result.rows);
-//         })
-//         .catch((err) => {
-//             console.log("err in /listusers: ", err);
-//         });
-// });
+app.get("/users/:searchusers", (req, res) => {
+    console.log(req.params.searchusers);
+    matchingUsers(req.params.searchusers)
+        .then((result) => {
+            // console.log("result in /searchusers: ", result);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in /searchusers: ", err);
+        });
+});
 
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {

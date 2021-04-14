@@ -23,18 +23,18 @@ export default class App extends Component {
         console.log("app mounted");
 
         axios.get("/user").then((res) => {
-            console.log("component mounted");
-            console.log(
-                "this is my response data after the app component mounted, it contains the user information from GET /user route",
-                res.data
-            );
+            // console.log("component mounted");
+            // console.log(
+            //     "this is my response data after the app component mounted, it contains the user information from GET /user route",
+            //     res.data
+            // );
             this.setState({ user: res.data });
-            console.log("this is my user id", this.state.user.id);
+            // console.log("this is my user id", this.state.user.id);
 
-            console.log(
-                "updated state => added to my user object from this.state all the user information",
-                this.state
-            );
+            // console.log(
+            //     "updated state => added to my user object from this.state all the user information",
+            //     this.state
+            // );
         });
     }
 
