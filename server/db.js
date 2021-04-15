@@ -66,18 +66,40 @@ module.exports.matchingUsers = function (val) {
     return db.query(`SELECT * FROM users WHERE first ILIKE $1`, [val + "%"]);
 };
 
-// module.exports.getOtherUserInfo = function (
-//     userId,
-//     first,
-//     last,
-//     profile_pic,
-//     bio
-// ) {
-//     return db.query(`SELECT * FROM users WHERE id = $1`, [
-//         userId,
-//         first,
-//         last,
-//         profile_pic,
-//         bio,
-//     ]);
-// };
+exports.friendshipStatus = function (recipient_id, sender_id) {
+    return db.query(
+        `SELECT * FROM friendships
+    WHERE (recipient_id = $1 AND sender_id = $2)
+    OR (recipient_id = $2 AND sender_id = $1)`,
+        [recipient_id, sender_id]
+    );
+};
+
+exports.sendFriendRequest = function (recipient_id, sender_id) {
+    return db.query(
+        `INSERT INTO friendships
+        (recipient_id, sender_id)
+         VALUES ($1, $2)`,
+        [recipient_id, sender_id]
+    );
+};
+
+exports.acceptFriendRequest = function (recipient_id, sender_id) {
+    return db.query(
+        `UPDATE friendships
+            SET accepted = true
+            WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (sender_id = $1 AND recipient_id = $2)
+            RETURNING *`,
+        [recipient_id, sender_id]
+    );
+};
+
+exports.deleteFriendship = function (recipient_id, sender_id) {
+    return db.query(
+        `DELETE FROM friendships
+            WHERE (recipient_id = $1 AND sender_id = $2)
+            OR (sender_id = $1 AND recipient_id = $2)`,
+        [recipient_id, sender_id]
+    );
+};

@@ -47,6 +47,10 @@ const {
     writeBio,
     lastRegisteredUsers,
     matchingUsers,
+    friendshipStatus,
+    sendFriendRequest,
+    acceptFriendRequest,
+    deleteFriendship,
 } = require("./db");
 const { response } = require("express");
 
@@ -311,6 +315,79 @@ app.get("/users/:searchusers", (req, res) => {
         .catch((err) => {
             console.log("err in /searchusers: ", err);
         });
+});
+///////////////////////////////////////FRIEDNREQUEST///////////////////////////
+app.get("/friends/:id", (req, res) => {
+    const friendRequestSender = req.session.userId;
+    const friendRequestReceiver = req.params.id;
+
+    console.log(friendRequestReceiver, "this is my receiever");
+    console.log(friendRequestSender, "this is my sender");
+
+    friendshipStatus(friendRequestReceiver, friendRequestSender)
+        .then((result) => {
+            if (result.rows == 0) {
+                res.json({
+                    setButtonText: "Add Friend",
+                });
+            } else if (result.rows[0].accepted == true) {
+                res.json({
+                    setButtonText: "Unfriend",
+                });
+            } else if (friendRequestReceiver == result.rows[0].sender_id) {
+                res.json({
+                    setButtonText: "Accept Friend Request",
+                });
+            } else if (friendRequestReceiver !== result.rows[0].sender_id) {
+                res.json({
+                    setButtonText: "Cancel Friend Request",
+                });
+            }
+        })
+
+        .catch((err) => {
+            console.log("Error in GET friends/:id: ", err);
+        });
+});
+
+app.post("/friendrequest/:id/:buttonText", (req, res) => {
+    const friendRequestSender = req.session.userId;
+    const friendRequestReceiver = req.params.id;
+    const buttonText = req.params.buttonText;
+
+    if (buttonText == "Add Friend") {
+        console.log("i am adding a new friend");
+        sendFriendRequest(friendRequestReceiver, friendRequestSender)
+            .then(() => {
+                //console.log("Result from POST friendrequest/:id: ", result);
+                res.json({
+                    setButtonText: "Cancel Friend Request",
+                });
+            })
+            .catch((err) => {
+                console.log("Error in POST friendrequest: ", err);
+            });
+    } else if (buttonText == "Accept Friend Request") {
+        acceptFriendRequest(friendRequestReceiver, friendRequestSender).then(
+            () => {
+                res.json({ setButtonText: "Unfriend" });
+            }
+        );
+    } else if (
+        buttonText == "Cancel Friend Request" ||
+        buttonText == "Unfriend"
+    ) {
+        deleteFriendship(friendRequestReceiver, friendRequestSender)
+            .then(() => {
+                //console.log("Result in /deletefriend: ", result);
+                res.json({
+                    setButtonText: "Add Friend",
+                });
+            })
+            .catch((err) => {
+                console.log("Error in /deletefriend: ", err);
+            });
+    }
 });
 
 ////////////////////////////////////////LOGOUT////////////////////////////////////

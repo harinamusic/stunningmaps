@@ -1,37 +1,7 @@
-// import React from "react";
-// import axios from "./axios";
-
-// export default class OtherProfile extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {};
-//     }
-//     async componentDidMount() {
-//         //similar to the one in app.js
-//         const { data } = axios.get(`/user/${this.props.match.params.id}.json`);
-//         if (data.invalid == true) {
-//             //maybe render an error message instead of redirecting?
-//             //history.push is how to redirect in React Browser Router
-//             this.props.history.push("/");
-//         }
-//         this.setState(data);
-//     }
-//     render() {
-//         return (
-//             <div>
-//                 <h1>
-//                     {this.state.first}
-//                     {this.state.last}
-//                 </h1>
-//                 <p>{this.state.bio}</p>
-//             </div>
-//         );
-//     }
-// }
-
 import { Component } from "react";
 import axios from "./axios";
 import { Profile } from "./profile";
+import { FriendButton } from "./friendship";
 
 export class OtherProfile extends Component {
     constructor(props) {
@@ -39,7 +9,7 @@ export class OtherProfile extends Component {
         this.state = {};
     }
     componentDidMount() {
-        console.log("this.state in otherprofile before: ", this.state);
+        // console.log("this.state in otherprofile before: ", this.state);
         axios
             .get(`/user/${this.props.match.params.id}.json`)
             .then(({ data }) => {
@@ -47,10 +17,10 @@ export class OtherProfile extends Component {
                     this.props.history.push("/");
                 } else {
                     this.setState(data);
-                    console.log(
-                        "this.state in otherprofile after: ",
-                        this.state
-                    );
+                    // console.log(
+                    //     "this.state in otherprofile after: ",
+                    //     this.state
+                    // );
                 }
             })
             .catch((err) => {
@@ -59,7 +29,7 @@ export class OtherProfile extends Component {
     }
 
     render() {
-        console.log("this.state in rendering otherprofile", this.state);
+        // console.log("this.state in rendering otherprofile", this.state);
         return (
             <section>
                 <h1>
@@ -79,6 +49,7 @@ export class OtherProfile extends Component {
                     {" "}
                     Back to your Profile
                 </a>
+                <FriendButton otherProfileUser={this.props.match.params.id} />
             </section>
         );
     }
