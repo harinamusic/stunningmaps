@@ -118,6 +118,18 @@ section {
     border: dotted #deaaff 5px;
     border-radius: 80%;
 }
+#pofilepic {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    border: dotted #deaaff 5px;
+    border-radius: 80%;
+}
+#profilepic {
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+}
 .minipic {
     width: 180px;
     height: 100px;
@@ -193,12 +205,37 @@ button {
     align-items: center;
     margin: 20px;
 }
-#profilepic {
-    height: 150px;
-    width: 200px;
-    object-fit: cover;
-}
+
 .findpeoplelink {
     position: absolute;
     top: 16%;
+}
+.realFriends {
+}
+.friendsList {
+    display: flex;
+    justify-content: center;
+}
+.wannabefriendsList {
+    display: flex;
+    justify-content: center;
+}
+.wannbeFriends {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.allmyFriends {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+#friend {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
 }

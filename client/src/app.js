@@ -8,6 +8,8 @@ import { Profile } from "./profile";
 import { OtherProfile } from "./otherprofile";
 import { BrowserRouter, Route } from "react-router-dom";
 import FindPeople from "./findpeople";
+import Friends from "./friends";
+// import Chat from "./chat";
 
 export default class App extends Component {
     constructor(props) {
@@ -131,6 +133,8 @@ export default class App extends Component {
                             )}
                         />
                         <Route path="/users" render={() => <FindPeople />} />
+                        <Route path="/friends" render={() => <Friends />} />
+                        {/* <Route path="/chat" render={() => <Chat />} /> */}
                     </div>
                 </BrowserRouter>
 

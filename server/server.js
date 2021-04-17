@@ -1,5 +1,10 @@
 const express = require("express");
 const app = express();
+//  const server = require("http").Server(app);
+//  const io = require("socket.io")(server, {
+//     allowRequest: (req, callback) =>
+//     callback(null, req.headers.referer.startsWith());
+// })
 const compression = require("compression");
 
 const path = require("path");
@@ -51,8 +56,11 @@ const {
     sendFriendRequest,
     acceptFriendRequest,
     deleteFriendship,
+    wannabeFriends,
 } = require("./db");
 const { response } = require("express");
+// const { io } = require("socket.io-client");
+// const { socket } = require("../client/src/socket");
 
 app.use(
     cookieSession({
@@ -60,6 +68,19 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+
+/////////////////////////////////USE THIS CODE INSTEAD OF ABOVE!!!!!/////////////
+/////////////IT GIVES SOCKET ACCESS TO OUR COOKIE SESSIONS///////
+// const cookieSessionMiddleware = cookieSession({
+//     secret: `I'm always angry.`,
+//     maxAge: 1000 * 60 * 60 * 24 * 90,
+// });
+
+// app.use(cookieSessionMiddleware);
+// io.use(function (socket, next) {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
+
 app.use(csurf());
 app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
@@ -231,7 +252,7 @@ app.post("/resetpassword/verify", (req, res) => {
 
 app.get("/user", (req, res) => {
     getUserData(req.session.userId).then((result) => {
-        console.log("Result in get /user: ", result);
+        // console.log("Result in get /user: ", result);
         res.json(result.rows[0]);
     });
 });
@@ -389,7 +410,26 @@ app.post("/friendrequest/:id/:buttonText", (req, res) => {
             });
     }
 });
-
+//////////////////////////////////FRIEND WANNABES////////////////////////////
+app.get("/friend-wannabes", (req, res) => {
+    wannabeFriends(req.session.userId).then((result) => {
+        res.json(result.rows);
+        console.log(result.rows, "this is my result.rows in /friendwannbes");
+    });
+});
+//////////////////////////////////////DELETE FRIEND////////////////////////////
+app.post("/deletefriend/:id", (req, res) => {
+    const friendRequestSender = req.session.userId;
+    const friendRequestReceiver = req.params.id;
+    deleteFriendship(friendRequestReceiver, friendRequestSender)
+        .then((result) => {
+            //console.log("Result in /deletefriend: ", result);
+            res.json({ result, setButtonText: "Add Friend" });
+        })
+        .catch((err) => {
+            console.log("Error in /deletefriend: ", err);
+        });
+});
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;
@@ -413,6 +453,21 @@ app.get("*", function (req, res) {
 app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
-
+////CHANGE TO SERVER .listen
 //inside of server directory => ALL server-side code
 // SQL, db, POST, GET routes all in this directory
+
+//////////RUNS THE SECOND THE USER LOGGES IN
+// io.on("connection", (socket) => {
+//     console.log(`socket id ${socket.id} is now connected`);
+//     //we only want to do sockets when a user is logged in
+//     if (!socket.request.session.userId) {
+//         return socket.disconnect(true);
+//     }
+//     const userId = socket.request.session.userId;
+///HERE RETRIEVE THE LAST 10 MESSAGES
+//db.getLastTenMsg().then(data)=> {
+//console.log(data.rows);
+//io.sockets.emit("mostRecentMsg", data.rows);
+//});
+// });

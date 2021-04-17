@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-
-export function FriendshipButton() {}
 import axios from "./axios";
 
 export function FriendButton(props) {
