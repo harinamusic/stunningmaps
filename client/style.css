@@ -118,7 +118,7 @@ section {
     border: dotted #deaaff 5px;
     border-radius: 80%;
 }
-#pofilepic {
+#profilepic {
     height: 300px;
     width: 300px;
     object-fit: cover;
@@ -186,11 +186,6 @@ button {
     align-items: center;
 }
 
-#backtoprofile {
-    position: absolute;
-    top: 16%;
-}
-
 .usersearch {
     display: flex;
     flex-direction: column;
@@ -206,12 +201,6 @@ button {
     margin: 20px;
 }
 
-.findpeoplelink {
-    position: absolute;
-    top: 16%;
-}
-.realFriends {
-}
 .friendsList {
     display: flex;
     justify-content: center;
@@ -238,4 +227,39 @@ button {
     flex-direction: column;
     align-items: center;
     margin: 20px;
+}
+
+.friendslink {
+    /* position: absolute; */
+    top: 13%;
+    margin: 5px;
+}
+.findpeoplelink {
+    /* position: absolute; */
+    top: 17%;
+    margin: 5px;
+}
+#backtoprofile {
+    position: absolute;
+    top: 16%;
+    margin-bottom: 5px;
+}
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #deaaff;
+    height: 70px;
+    width: 500px;
+    position: absolute;
+    top: 12%;
+    border-radius: 8px;
+    border: 3px black;
+}
+
+#logout {
+    position: absolute;
+    right: 90px;
+    top: 160px;
 }

@@ -44,11 +44,11 @@ export class OtherProfile extends Component {
                     <h2>{this.state.first}'s Bio</h2>
                     <p>{this.state.bio}</p>
                 </div>
-
-                <a id="backtoprofile" href="/">
-                    {" "}
-                    Back to your Profile
-                </a>
+                <div className="navbar">
+                    <a id="backtoprofile" href="/">
+                        PROFILE
+                    </a>
+                </div>
                 <FriendButton otherProfileUser={this.props.match.params.id} />
             </section>
         );

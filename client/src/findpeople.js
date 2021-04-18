@@ -60,10 +60,11 @@ export default function FindPeople() {
                 placeholder="Type a Name"
                 onChange={handleChange}
             />
-            <a id="backtoprofile" href="/">
-                {" "}
-                Back to your Profile
-            </a>
+            <div className="navbar">
+                <a id="backtoprofile" href="/">
+                    PROFILE
+                </a>
+            </div>
             {users.map((user) => (
                 <div className="userdivinsearch" key={user.id}>
                     <Link to={"/user/" + user.id}>

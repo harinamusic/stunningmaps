@@ -8,10 +8,30 @@ export default function reducer(state = {}, action) {
             friendsandWannabes: action.friends,
         });
     }
-    if (action.type == "UNFRIEND") {
-        return {
+
+    if (action.type == "ACCEPT_FRIEND") {
+        state = {
             ...state,
-            friendsandWannabes: action.deletefriendship,
+            friendsandWannabes: state.friendsandWannabes.map((user) => {
+                if (user.id == action.acceptfriend) {
+                    return {
+                        ...user,
+                        accepted: true,
+                    };
+                } else {
+                    return user;
+                }
+            }),
+        };
+    }
+    if (action.type == "UNFRIEND") {
+        state = {
+            ...state,
+            friendsandWannabes: state.friendsandWannabes.filter((friend) => {
+                console.log(friend);
+                friend = action.deletefriendship;
+                return { ...state.friendsandWannabes };
+            }),
         };
     }
     return state;

@@ -18,17 +18,31 @@ export function receiveFriendsWannabes() {
         });
 }
 
-export async function acceptFriend() {
-    const { data } = await axios.post();
-    return {
-        type: "ACCEPT_FRIEND",
-    };
+// export async function acceptFriend() {
+//     const { data } = await axios.post();
+//     return {
+//         type: "ACCEPT_FRIEND",
+//     };
+// }
+export function acceptFriend(userId) {
+    console.log("userId", userId);
+    return axios.post("/acceptfriend/" + userId).then((result) => {
+        console.log(
+            "this is the result row from my friendships table",
+            result.data[0]
+        );
+        return {
+            type: "ACCEPT_FRIEND",
+            friendaccepted: result.data[0],
+        };
+    });
 }
 
 export async function unfriend(userId) {
     const { data } = await axios.post("/deletefriend/" + userId);
+    console.log(data, "this is mi result");
     return {
         type: "UNFRIEND",
-        deletefriendship: data,
+        deletefriendship: data[0],
     };
 }

@@ -424,10 +424,26 @@ app.post("/deletefriend/:id", (req, res) => {
     deleteFriendship(friendRequestReceiver, friendRequestSender)
         .then((result) => {
             //console.log("Result in /deletefriend: ", result);
-            res.json({ result, setButtonText: "Add Friend" });
+            res.json(result);
         })
         .catch((err) => {
             console.log("Error in /deletefriend: ", err);
+        });
+});
+app.post("/acceptfriend/:id", (req, res) => {
+    const friendRequestSender = req.session.userId;
+    const friendRequestReceiver = req.params.id;
+    acceptFriendRequest(friendRequestReceiver, friendRequestSender)
+        .then((result) => {
+            console.log(
+                "results, receiver from /post friends/:id",
+                result,
+                friendRequestReceiver
+            );
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("err in /acceptfriend: ", err);
         });
 });
 ////////////////////////////////////////LOGOUT////////////////////////////////////
