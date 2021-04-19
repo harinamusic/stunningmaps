@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-//  const server = require("http").Server(app);
-//  const io = require("socket.io")(server, {
-//     allowRequest: (req, callback) =>
-//     callback(null, req.headers.referer.startsWith());
-// })
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
 const compression = require("compression");
 
 const path = require("path");
@@ -58,29 +58,30 @@ const {
     deleteFriendship,
     wannabeFriends,
 } = require("./db");
-const { response } = require("express");
-// const { io } = require("socket.io-client");
-// const { socket } = require("../client/src/socket");
 
-app.use(
-    cookieSession({
-        secret: `what kind of key`,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+// const { io } = require("socket.io-client");
+const { socket } = require("../client/src/socket");
+
+// app.use(
+//     cookieSession({
+//         secret: `what kind of key`,
+//         maxAge: 1000 * 60 * 60 * 24 * 14,
+//     })
+// );
 
 /////////////////////////////////USE THIS CODE INSTEAD OF ABOVE!!!!!/////////////
 /////////////IT GIVES SOCKET ACCESS TO OUR COOKIE SESSIONS///////
-// const cookieSessionMiddleware = cookieSession({
-//     secret: `I'm always angry.`,
-//     maxAge: 1000 * 60 * 60 * 24 * 90,
-// });
+const { response } = require("express");
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+});
 
-// app.use(cookieSessionMiddleware);
-// io.use(function (socket, next) {
-//     cookieSessionMiddleware(socket.request, socket.request.res, next);
-// });
-
+app.use(cookieSessionMiddleware);
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+///////////////////////////CSURF////////////////////////////////
 app.use(csurf());
 app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
@@ -466,7 +467,7 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 ////CHANGE TO SERVER .listen
@@ -476,14 +477,32 @@ app.listen(process.env.PORT || 3001, function () {
 //////////RUNS THE SECOND THE USER LOGGES IN
 // io.on("connection", (socket) => {
 //     console.log(`socket id ${socket.id} is now connected`);
-//     //we only want to do sockets when a user is logged in
+//     //     //we only want to do sockets when a user is logged in
 //     if (!socket.request.session.userId) {
 //         return socket.disconnect(true);
 //     }
 //     const userId = socket.request.session.userId;
-///HERE RETRIEVE THE LAST 10 MESSAGES
-//db.getLastTenMsg().then(data)=> {
-//console.log(data.rows);
-//io.sockets.emit("mostRecentMsg", data.rows);
-//});
+//     ///HERE RETRIEVE THE LAST 10 MESSAGES
+//     // db.getLastTenMsg().then((data)=> {
+//     // console.log(data.rows);
+//     // io.sockets.emit("mostRecentMsg", data.rows);
+//     // });
+//     io.emit("achtung", {
+//         warning: "This site will go offline for maintenance in one hour.",
+//     });
 // });
+io.on("connection", (socket) => {
+    console.log(`A socket with the id ${socket.id} just CONNECTED`);
+    socket.emit("welcome", {
+        msg: "It is nice to see you.",
+    });
+    io.emit("newUser", {
+        data: "a new user joined",
+    });
+    socket.on("yo", (data) => {
+        console.log(data);
+    });
+    socket.on("disconnect", () => {
+        console.log(`A socket with the id ${socket.id} just DISCONNECTED`);
+    });
+});

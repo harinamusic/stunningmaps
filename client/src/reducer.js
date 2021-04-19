@@ -13,7 +13,7 @@ export default function reducer(state = {}, action) {
         state = {
             ...state,
             friendsandWannabes: state.friendsandWannabes.map((user) => {
-                if (user.id == action.acceptfriend) {
+                if (user.id == action.friendaccepted) {
                     return {
                         ...user,
                         accepted: true,
@@ -25,14 +25,16 @@ export default function reducer(state = {}, action) {
         };
     }
     if (action.type == "UNFRIEND") {
+        console.log(state.friendsandWannabes, "state.friendsadwannabes");
         state = {
             ...state,
             friendsandWannabes: state.friendsandWannabes.filter((friend) => {
-                console.log(friend);
-                friend = action.deletefriendship;
-                return { ...state.friendsandWannabes };
+                if (friend.id !== action.deletefriendship) {
+                    return friend;
+                }
             }),
         };
+        console.log(state.friendsandWannabes, "my state");
     }
     return state;
 }

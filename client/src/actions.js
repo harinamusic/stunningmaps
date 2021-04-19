@@ -33,9 +33,23 @@ export function acceptFriend(userId) {
         );
         return {
             type: "ACCEPT_FRIEND",
-            friendaccepted: result.data[0],
+            friendaccepted: userId,
         };
     });
+}
+
+export async function chatMessages(msgs) {
+    return {
+        type: "GET_MESSAGES",
+        messages: msgs,
+    };
+}
+
+export async function chatMessage(msg) {
+    return {
+        type: "GET_MESSAGE",
+        message: msg,
+    };
 }
 
 export async function unfriend(userId) {
@@ -43,6 +57,6 @@ export async function unfriend(userId) {
     console.log(data, "this is mi result");
     return {
         type: "UNFRIEND",
-        deletefriendship: data[0],
+        deletefriendship: userId,
     };
 }

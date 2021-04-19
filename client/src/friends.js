@@ -31,7 +31,7 @@ export default function Friends() {
     if (wannabes.length == 0 && friends.length == 0) {
         return (
             <h1>
-                hoh noooooo!!!Seems like you don't have any friends yet! Go to
+                hoh noooooo!!!Seems like you do not have any friends yet! Go to
                 Search to find some like minded people
             </h1>
         );
