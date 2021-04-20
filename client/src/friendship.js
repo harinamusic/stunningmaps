@@ -12,19 +12,11 @@ export function FriendButton(props) {
         axios
             .get(`/friends/${props.otherProfileUser}`)
             .then((result) => {
-                console.log(result, "data in frienship component fuck me");
-                setFriends(
-                    result.data.result.rows.filter((friend) => {
-                        if (friend.id !== `${props.userId}`) {
-                            return friend;
-                        }
-                    })
-                );
-
-                // mystate.push(result.data.result.rows);
-                // console.log(mystate, "this my state");
-                // console.log(result.data.result.rows, "my result.rows");
                 setButtonText(result.data.setButtonText);
+
+                setFriends(result.data.friends);
+                console.log(props.userId, "this is it!!!!");
+                console.log({ friends }, "my friends array");
             })
             .catch((err) => {
                 console.log("Error in useEffect /api/friends: ", err);
@@ -38,32 +30,43 @@ export function FriendButton(props) {
             .post(`/friendrequest/${props.otherProfileUser}/${buttonText}`)
             .then((result) => {
                 setButtonText(result.data.setButtonText);
+                setFriends(undefined);
             });
     }
-
-    return (
-        <div>
-            {friends &&
-                friends.map((friend) => (
-                    <div id="friend" key={friend.id}>
-                        <h2>
-                            {friend.first} {friend.last}
-                        </h2>
-                        <Link to={"/user/" + friend.id}>
-                            <img
-                                id="profilepic"
-                                // id="profilepic"
-                                src={
-                                    friend.profile_pic ||
-                                    "profilepic-static.jpg"
-                                }
-                            />
-                        </Link>
-                    </div>
-                ))}
+    if (friends == undefined || friends.length == 0) {
+        console.log(friends);
+        return (
             <div>
                 <button onClick={handleClick}>{buttonText}</button>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <div>
+                <div className="friendsoffriends-container">
+                    {friends &&
+                        friends.map((friend) => (
+                            <div id="friendOfFriend" key={friend.id}>
+                                <h2>
+                                    {friend.first} {friend.last}
+                                </h2>
+                                <Link to={"/user/" + friend.id}>
+                                    <img
+                                        id="profilepic"
+                                        // id="profilepic"
+                                        src={
+                                            friend.profile_pic ||
+                                            "profilepic-static.jpg"
+                                        }
+                                    />
+                                </Link>
+                            </div>
+                        ))}
+                </div>
+                <div>
+                    <button onClick={handleClick}>{buttonText}</button>
+                </div>
+            </div>
+        );
+    }
 }

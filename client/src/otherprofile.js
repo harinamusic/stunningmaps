@@ -13,6 +13,7 @@ export class OtherProfile extends Component {
         axios
             .get(`/user/${this.props.match.params.id}.json`)
             .then(({ data }) => {
+                console.log(this.props.myid, "myid");
                 if (data.redirectToProfile) {
                     this.props.history.push("/");
                 } else {
@@ -44,9 +45,18 @@ export class OtherProfile extends Component {
                     <a id="backtoprofile" href="/">
                         PROFILE
                     </a>
+                    <a className="friendslink" href="/friends">
+                        MY FRIENDS
+                    </a>
+                    <a className="findpeoplelink" href="/users">
+                        SEARCH
+                    </a>
+                    <a className="chatlink" href="/chat">
+                        CHAT
+                    </a>
                 </div>
                 <FriendButton
-                    userId={this.state.id}
+                    userId={this.props.myid}
                     otherProfileUser={this.props.match.params.id}
                 />
             </section>

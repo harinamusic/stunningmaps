@@ -317,22 +317,22 @@ app.get("/user/:id.json", (req, res) => {
             });
     }
 });
-app.get("/user/:id/friends.json", (req, res) => {
-    const friendRequestSender = req.session.userId;
-    const friendRequestReceiver = req.params.id;
-    friendshipStatus(friendRequestReceiver, friendRequestSender).then(
-        (result) => {
-            console.log("it woeked");
-            if (result.rows[0].accepted == true) {
-                console.log("yes we are friends");
-                friendsOnOtherProfile(req.params.id).then((result) => {
-                    console.log("i got it", result.rows);
-                    res.json(result);
-                });
-            }
-        }
-    );
-});
+// app.get("/user/:id/friends.json", (req, res) => {
+//     const friendRequestSender = req.session.userId;
+//     const friendRequestReceiver = req.params.id;
+//     friendshipStatus(friendRequestReceiver, friendRequestSender).then(
+//         (result) => {
+//             console.log("it woeked");
+//             if (result.rows[0].accepted == true) {
+//                 console.log("yes we are friends");
+//                 friendsOnOtherProfile(req.params.id).then((result) => {
+//                     console.log("i got it", result.rows);
+//                     res.json(result);
+//                 });
+//             }
+//         }
+//     );
+// });
 
 /////////////////////////////////////FIND PEOPLE///////////////////////////////
 
@@ -374,9 +374,15 @@ app.get("/friends/:id", (req, res) => {
                 });
             } else if (result.rows[0].accepted == true) {
                 friendsOnOtherProfile(req.params.id).then((result) => {
-                    console.log(result.rows);
+                    console.log(result.rows, "this is my result.rows array");
+                    const friends = result.rows.filter(
+                        (friend) => friend.id !== req.session.userId
+                    );
+                    /*...*/
+                    // res.json(friends);
                     res.json({
-                        result,
+                        friends,
+                        // result,
                         setButtonText: "Unfriend",
                     });
                 });
