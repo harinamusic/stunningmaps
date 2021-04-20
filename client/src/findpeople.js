@@ -36,21 +36,6 @@ export default function FindPeople() {
                 console.log("hi i am your users", users);
             });
         }
-        // });
-        // axios
-        //     .get("/lastthreeusers")
-        //     .then(({ data }) => {
-        //         setUsers(data);
-        //         console.log(data, "data in /users in findpoeple");
-        //     })
-        //     .catch((err) => {
-        //         console.log("FindPeople GET /users catch err: ", err);
-        //     });
-        // (async () => {
-        //     const { data } = await axios.get("/lastthreeusers");
-        //     setUsers(data);
-        //     // console.log(data.user);
-        // })();
     }, [searchusers]);
 
     return (
@@ -61,6 +46,12 @@ export default function FindPeople() {
                 onChange={handleChange}
             />
             <div className="navbar">
+                <a className="friendslink" href="/friends">
+                    FRIENDS
+                </a>
+                <a className="chatlink" href="/chat">
+                    CHAT
+                </a>
                 <a id="backtoprofile" href="/">
                     PROFILE
                 </a>

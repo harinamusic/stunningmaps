@@ -57,10 +57,13 @@ const {
     acceptFriendRequest,
     deleteFriendship,
     wannabeFriends,
+    getLastTenMsg,
+    insertMessage,
+    friendsOnOtherProfile,
 } = require("./db");
 
 // const { io } = require("socket.io-client");
-const { socket } = require("../client/src/socket");
+// const { socket } = require("../client/src/socket");
 
 // app.use(
 //     cookieSession({
@@ -297,7 +300,7 @@ app.post("/bio", (req, res) => {
 /////////////////////////////////////GET OTHER USER INFO//////////////////////////
 app.get("/user/:id.json", (req, res) => {
     const { userId } = req.session;
-    console.log(userId, "this is the users id i am wqanting");
+    // console.log(userId, "this is the users id i am wqanting");
     if (userId == req.params.id) {
         res.json({ redirectToProfile: true });
     } else {
@@ -314,6 +317,23 @@ app.get("/user/:id.json", (req, res) => {
             });
     }
 });
+app.get("/user/:id/friends.json", (req, res) => {
+    const friendRequestSender = req.session.userId;
+    const friendRequestReceiver = req.params.id;
+    friendshipStatus(friendRequestReceiver, friendRequestSender).then(
+        (result) => {
+            console.log("it woeked");
+            if (result.rows[0].accepted == true) {
+                console.log("yes we are friends");
+                friendsOnOtherProfile(req.params.id).then((result) => {
+                    console.log("i got it", result.rows);
+                    res.json(result);
+                });
+            }
+        }
+    );
+});
+
 /////////////////////////////////////FIND PEOPLE///////////////////////////////
 
 app.get("/lastthreeusers", (req, res) => {
@@ -353,8 +373,12 @@ app.get("/friends/:id", (req, res) => {
                     setButtonText: "Add Friend",
                 });
             } else if (result.rows[0].accepted == true) {
-                res.json({
-                    setButtonText: "Unfriend",
+                friendsOnOtherProfile(req.params.id).then((result) => {
+                    console.log(result.rows);
+                    res.json({
+                        result,
+                        setButtonText: "Unfriend",
+                    });
                 });
             } else if (friendRequestReceiver == result.rows[0].sender_id) {
                 res.json({
@@ -415,7 +439,7 @@ app.post("/friendrequest/:id/:buttonText", (req, res) => {
 app.get("/friend-wannabes", (req, res) => {
     wannabeFriends(req.session.userId).then((result) => {
         res.json(result.rows);
-        console.log(result.rows, "this is my result.rows in /friendwannbes");
+        // console.log(result.rows, "this is my result.rows in /friendwannbes");
     });
 });
 //////////////////////////////////////DELETE FRIEND////////////////////////////
@@ -447,6 +471,8 @@ app.post("/acceptfriend/:id", (req, res) => {
             console.log("err in /acceptfriend: ", err);
         });
 });
+////////////////////////FRIENDS ON OTHER PROFILE.////////////////////
+
 ////////////////////////////////////////LOGOUT////////////////////////////////////
 app.get("/logout", (req, res) => {
     req.session = null;
@@ -475,34 +501,63 @@ server.listen(process.env.PORT || 3001, function () {
 // SQL, db, POST, GET routes all in this directory
 
 //////////RUNS THE SECOND THE USER LOGGES IN
-// io.on("connection", (socket) => {
-//     console.log(`socket id ${socket.id} is now connected`);
-//     //     //we only want to do sockets when a user is logged in
-//     if (!socket.request.session.userId) {
-//         return socket.disconnect(true);
-//     }
-//     const userId = socket.request.session.userId;
-//     ///HERE RETRIEVE THE LAST 10 MESSAGES
-//     // db.getLastTenMsg().then((data)=> {
-//     // console.log(data.rows);
-//     // io.sockets.emit("mostRecentMsg", data.rows);
-//     // });
-//     io.emit("achtung", {
-//         warning: "This site will go offline for maintenance in one hour.",
-//     });
-// });
 io.on("connection", (socket) => {
-    console.log(`A socket with the id ${socket.id} just CONNECTED`);
-    socket.emit("welcome", {
-        msg: "It is nice to see you.",
+    console.log(`socket id ${socket.id} is now connected`);
+    //     //we only want to do sockets when a user is logged in
+    const userId = socket.request.session.userId;
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    ///HERE RETRIEVE THE LAST 10 MESSAGES
+    getLastTenMsg().then((data) => {
+        // console.log(data.rows.reverse());
+        io.sockets.emit("chatMessages", data.rows.reverse());
     });
-    io.emit("newUser", {
-        data: "a new user joined",
-    });
-    socket.on("yo", (data) => {
-        console.log(data);
-    });
-    socket.on("disconnect", () => {
-        console.log(`A socket with the id ${socket.id} just DISCONNECTED`);
+    // io.emit("achtung", {
+    //     warning: "This site will go offline for maintenance in one hour.",
+    // });
+
+    socket.on("newMessage", (newMsg) => {
+        // console.log("this message: ", newMsg);
+        // console.log("from user: ", userId);
+
+        insertMessage(userId, newMsg)
+            .then(() => {
+                getUserData(userId)
+                    .then((data) => {
+                        let infoMsg = {
+                            first: data.rows[0].first,
+                            last: data.rows[0].last,
+                            profile_pic: data.rows[0].profile_pic,
+                            message: newMsg,
+                        };
+                        io.sockets.emit("chatMessage", infoMsg);
+                    })
+                    .catch((err) => {
+                        console.log(
+                            "err in getting user data from socket.on: ",
+                            err
+                        );
+                    });
+            })
+            .catch((err) => {
+                console.log("err in inserMessage: ", err);
+            });
     });
 });
+// io.on("connection", (socket) => {
+//     console.log(`A socket with the id ${socket.id} just CONNECTED`);
+//     socket.emit("welcome", {
+//         msg: "It is nice to see you.",
+//     });
+//     io.emit("newUser", {
+//         data: "a new user joined",
+//     });
+//     socket.on("yo", (data) => {
+//         console.log(data);
+//     });
+//     socket.on("disconnect", () => {
+//         console.log(`A socket with the id ${socket.id} just DISCONNECTED`);
+//     });
+// });

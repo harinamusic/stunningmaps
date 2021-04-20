@@ -38,6 +38,14 @@ export function acceptFriend(userId) {
     });
 }
 
+export async function unfriend(userId) {
+    const { data } = await axios.post("/deletefriend/" + userId);
+    console.log(data, "this is mi result");
+    return {
+        type: "UNFRIEND",
+        deletefriendship: userId,
+    };
+}
 export async function chatMessages(msgs) {
     return {
         type: "GET_MESSAGES",
@@ -49,14 +57,5 @@ export async function chatMessage(msg) {
     return {
         type: "GET_MESSAGE",
         message: msg,
-    };
-}
-
-export async function unfriend(userId) {
-    const { data } = await axios.post("/deletefriend/" + userId);
-    console.log(data, "this is mi result");
-    return {
-        type: "UNFRIEND",
-        deletefriendship: userId,
     };
 }

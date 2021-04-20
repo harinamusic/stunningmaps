@@ -46,6 +46,9 @@ export default function Friends() {
                 <a className="findpeoplelink" href="/users">
                     SEARCH
                 </a>
+                <a className="chatlink" href="/chat">
+                    CHAT
+                </a>
             </div>
             <div />
             <h2>Your Friends</h2>

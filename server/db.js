@@ -116,3 +116,36 @@ exports.wannabeFriends = function (id) {
         [id]
     );
 };
+
+exports.getLastTenMsg = function () {
+    return db.query(`SELECT chatmessages.id, chatmessages.message, chatmessages.sender_id, chatmessages.created_at, users.first, users.last, users.profile_pic
+FROM chatmessages
+JOIN users
+ON chatmessages.sender_id = users.id
+ORDER BY created_at DESC
+LIMIT 10`);
+};
+
+module.exports.insertMessage = function (sender_id, message) {
+    return db.query(
+        `INSERT INTO chatmessages (sender_id, message)
+        VALUES ($1, $2)
+        RETURNING message`,
+        [sender_id, message]
+    );
+};
+
+exports.friendsOnOtherProfile = function (id) {
+    return db.query(
+        `SELECT users.id, first, last, profile_pic, accepted
+  FROM friendships
+  JOIN users
+
+  ON (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+  OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
+  
+LIMIT 3
+        `,
+        [id]
+    );
+};

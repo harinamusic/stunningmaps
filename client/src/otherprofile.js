@@ -8,8 +8,8 @@ export class OtherProfile extends Component {
         super(props);
         this.state = {};
     }
+
     componentDidMount() {
-        // console.log("this.state in otherprofile before: ", this.state);
         axios
             .get(`/user/${this.props.match.params.id}.json`)
             .then(({ data }) => {
@@ -17,10 +17,6 @@ export class OtherProfile extends Component {
                     this.props.history.push("/");
                 } else {
                     this.setState(data);
-                    // console.log(
-                    //     "this.state in otherprofile after: ",
-                    //     this.state
-                    // );
                 }
             })
             .catch((err) => {
@@ -49,7 +45,10 @@ export class OtherProfile extends Component {
                         PROFILE
                     </a>
                 </div>
-                <FriendButton otherProfileUser={this.props.match.params.id} />
+                <FriendButton
+                    userId={this.state.id}
+                    otherProfileUser={this.props.match.params.id}
+                />
             </section>
         );
     }

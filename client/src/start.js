@@ -9,16 +9,9 @@ import reduxPromise from "redux-promise";
 import { composeWithDevTools } from "redux-devtools-extension";
 import Welcome from "./welcome";
 import App from "./app";
-const socket = io.connect();
+
 import reducer from "./reducer";
 
-socket.on("welcome", (data) => {
-    console.log(data);
-});
-
-socket.on("newUser", (data) => {
-    console.log(data);
-});
 const store = createStore(
     reducer,
     composeWithDevTools(applyMiddleware(reduxPromise))

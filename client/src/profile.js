@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { BioEditor } from "./bio-editor";
+import { FriendButton } from "./friendship";
 import { ProfilePic } from "./profile-pic";
 
 export class Profile extends Component {
@@ -17,6 +18,9 @@ export class Profile extends Component {
                     </a>
                     <a className="findpeoplelink" href="/users">
                         SEARCH
+                    </a>
+                    <a className="chatlink" href="/chat">
+                        CHAT
                     </a>
                 </div>
                 <h1>
@@ -37,6 +41,7 @@ export class Profile extends Component {
                         showUploader={() => this.props.showUploader()}
                         style={"bigpic"}
                     />
+
                     <div className="biotext">
                         <BioEditor
                             bio={this.props.bio}

@@ -36,5 +36,19 @@ export default function reducer(state = {}, action) {
         };
         console.log(state.friendsandWannabes, "my state");
     }
+    if (action.type == "GET_MESSAGES") {
+        state = {
+            ...state,
+            messages: action.messages,
+        };
+    }
+
+    if (action.type == "GET_MESSAGE") {
+        state = {
+            ...state,
+            messages: [...state.messages, action.message],
+        };
+    }
+
     return state;
 }
