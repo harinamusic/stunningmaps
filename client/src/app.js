@@ -80,16 +80,21 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <header>
-                        <h1>WONDER</h1>
-                        <Logo />
-                        <a id="logout" href="/logout">
-                            {" "}
-                            Log out
+                <div className="generalnavbar">
+                    <div className="topnav">
+                        <a className="active" href="#home">
+                            Home
                         </a>
-                    </header>
+                        <a href="#news">News</a>
+                        <a href="#contact">Contact</a>
+                        <a href="#about">About</a>
+                    </div>
                 </div>
+
+                <a id="logout" href="/logout">
+                    {" "}
+                    Log out
+                </a>
 
                 <ProfilePic
                     // {...this.state.user}

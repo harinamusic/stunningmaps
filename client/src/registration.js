@@ -61,43 +61,54 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div id="register">
-                <h2>Register here to enter the world of WONDER</h2>
-                {/* //has to be truthy in order to see it */}
-                {this.state.error && (
-                    <p className="error">
-                        Oops!! something went wrong, please fill out all the
-                        fields!
-                    </p>
-                )}
-                {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
-                <input
-                    type="text"
-                    name="first"
-                    placeholder="first"
-                    onChange={(e) => this.handleChange(e)}
+            <div className="welcomepage">
+                <img
+                    className="icecream"
+                    src="/icecreamwaffels.jpeg"
+                    // alt={`${props.first} ${props.last}`}
                 />
-                <input
-                    type="text"
-                    name="last"
-                    placeholder="last"
-                    onChange={(e) => this.handleChange(e)}
-                />
-                <input
-                    type="text"
-                    name="email"
-                    placeholder="email"
-                    onChange={(e) => this.handleChange(e)}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    onChange={(e) => this.handleChange(e)}
-                />
-                <button onClick={() => this.handleClick()}>register</button>
-                <br />
-                <Link to="/login">Click me to go to login</Link>
+                <div className="registernav">
+                    <div id="register">
+                        <h2>Register here to enter the world of WONDER</h2>
+                        {/* //has to be truthy in order to see it */}
+                        {this.state.error && (
+                            <p className="error">
+                                Oops!! something went wrong, please fill out all
+                                the fields!
+                            </p>
+                        )}
+                        {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
+                        <input
+                            type="text"
+                            name="first"
+                            placeholder="first"
+                            onChange={(e) => this.handleChange(e)}
+                        />
+                        <input
+                            type="text"
+                            name="last"
+                            placeholder="last"
+                            onChange={(e) => this.handleChange(e)}
+                        />
+                        <input
+                            type="text"
+                            name="email"
+                            placeholder="email"
+                            onChange={(e) => this.handleChange(e)}
+                        />
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="password"
+                            onChange={(e) => this.handleChange(e)}
+                        />
+                        <button onClick={() => this.handleClick()}>
+                            register
+                        </button>
+                        <br />
+                        <Link to="/login">Click me to go to login</Link>
+                    </div>
+                </div>
             </div>
         );
     }
