@@ -82,12 +82,12 @@ export default class App extends Component {
             <div>
                 <div className="generalnavbar">
                     <div className="topnav">
-                        <a className="active" href="#home">
+                        <a className="active" href="/">
                             Home
                         </a>
-                        <a href="#news">News</a>
-                        <a href="#contact">Contact</a>
-                        <a href="#about">About</a>
+                        <a href="/users">Favourites</a>
+                        <a href="/friends">Ratings</a>
+                        <a href="/chat">News</a>
                     </div>
                 </div>
 

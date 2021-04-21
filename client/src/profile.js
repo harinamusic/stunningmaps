@@ -11,27 +11,24 @@ export class Profile extends Component {
     }
     render() {
         return (
-            <div className="userprofile">
-                <div className="navbar">
-                    <a className="friendslink" href="/friends">
-                        MY FRIENDS
-                    </a>
-                    <a className="findpeoplelink" href="/users">
-                        SEARCH
-                    </a>
-                    <a className="chatlink" href="/chat">
-                        CHAT
-                    </a>
-                </div>
-                <h1>
-                    Welcome to WONDER {this.props.first} {this.props.last}
-                </h1>
-                <div className="info">
+            <div>
+                {/* <h1>
+                    Find the best icecream places nearby {this.props.first}{" "}
+                    {this.props.last}
+                </h1> */}
+                {/* <div className="info">
                     <p>Name: {this.props.first}</p>
                     <p>Surname: {this.props.last}</p>
-                </div>
+                </div> */}
                 <div>
-                    <ProfilePic
+                    <div className="welcomepage">
+                        <img
+                            className="icecream"
+                            src="/icecreamwaffels.jpeg"
+                            // alt={`${props.first} ${props.last}`}
+                        />
+                    </div>
+                    {/* <ProfilePic
                         id={this.props.id}
                         first={this.props.first}
                         last={this.props.last}
@@ -40,7 +37,7 @@ export class Profile extends Component {
                         // onClick={this.props.showUploader}
                         showUploader={() => this.props.showUploader()}
                         style={"bigpic"}
-                    />
+                    /> */}
 
                     <div className="biotext">
                         <BioEditor

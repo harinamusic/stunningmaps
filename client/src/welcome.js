@@ -5,17 +5,18 @@ import ResetPassword from "./resetpassword";
 
 export default function Welcome() {
     return (
+        // <div>
+        //     <div className="generalnavbar">
+        //         <div className="topnav">
+        //             <a className="active" href="#home">
+        //                 Home
+        //             </a>
+        //             <a href="#news">News</a>
+        //             <a href="#contact">Contact</a>
+        //             <a href="#about">About</a>
+        //         </div>
+        //     </div>
         <div>
-            <div className="generalnavbar">
-                <div className="topnav">
-                    <a className="active" href="#home">
-                        Home
-                    </a>
-                    <a href="#news">News</a>
-                    <a href="#contact">Contact</a>
-                    <a href="#about">About</a>
-                </div>
-            </div>
             <HashRouter>
                 {/* //we need to wrap everything in the hashrouter in a div => we can have as many routes as we want 
                 //links work because they are in HashRouter*/}

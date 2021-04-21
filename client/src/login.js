@@ -57,32 +57,80 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div id="login">
-                <h1>Login here</h1>
-                {/* //has to be truthy in order to see it */}
-                {this.state.error && (
-                    <p className="error">
-                        Oops!! something went wrong, please try again!
-                    </p>
-                )}
-                <input
-                    required
-                    type="text"
-                    name="email"
-                    placeholder="email"
-                    onChange={(e) => this.handleChange(e)}
-                />
-                <input
-                    required
-                    type="password"
-                    name="password"
-                    placeholder="password"
-                    onChange={(e) => this.handleChange(e)}
-                />
+            <div>
+                <div>
+                    <div className="generalnavbar">
+                        <div className="topnav">
+                            <a className="active" href="/welcome">
+                                Registration
+                            </a>
+                            <a href="#/login">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div className="welcomepage">
+                    <img
+                        className="icecream"
+                        src="/icecreamwaffels.jpeg"
+                        // alt={`${props.first} ${props.last}`}
+                    />
+                    <div className="registernav">
+                        <div id="register">
+                            <h1>Login here</h1>
+                            {/* //has to be truthy in order to see it */}
+                            {this.state.error && (
+                                <p className="error">
+                                    Oops!! something went wrong, please fill out
+                                    all the fields!
+                                </p>
+                            )}
+                            {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
 
-                <button onClick={() => this.handleClick()}>login</button>
-                <Link to="/resetpassword">Click me to reset your password</Link>
-                <Link to="/">Click me to go to register</Link>
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="email"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="password"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <div className="container">
+                                <div className="center">
+                                    <button
+                                        className="btn"
+                                        onClick={() => this.handleClick()}
+                                    >
+                                        <svg
+                                            width="180px"
+                                            height="60px"
+                                            viewBox="0 0 180 60"
+                                            className="border"
+                                        >
+                                            <polyline
+                                                points="179,1 179,59 1,59 1,1 179,1"
+                                                className="bg-line"
+                                            />
+                                            <polyline
+                                                points="179,1 179,59 1,59 1,1 179,1"
+                                                className="hl-line"
+                                            />
+                                        </svg>
+                                        <span>login</span>
+                                    </button>
+                                </div>
+                            </div>
+                            {/* //has to be truthy in order to see it */}
+
+                            <Link className="resetlink" to="/resetpassword">
+                                reset password
+                            </Link>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

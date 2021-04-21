@@ -61,52 +61,104 @@ export default class Registration extends Component {
 
     render() {
         return (
-            <div className="welcomepage">
-                <img
-                    className="icecream"
-                    src="/icecreamwaffels.jpeg"
-                    // alt={`${props.first} ${props.last}`}
-                />
-                <div className="registernav">
-                    <div id="register">
-                        <h2>Register here to enter the world of WONDER</h2>
-                        {/* //has to be truthy in order to see it */}
-                        {this.state.error && (
-                            <p className="error">
-                                Oops!! something went wrong, please fill out all
-                                the fields!
-                            </p>
-                        )}
-                        {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
-                        <input
-                            type="text"
-                            name="first"
-                            placeholder="first"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <input
-                            type="text"
-                            name="last"
-                            placeholder="last"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <input
-                            type="text"
-                            name="email"
-                            placeholder="email"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="password"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <button onClick={() => this.handleClick()}>
-                            register
-                        </button>
-                        <br />
-                        <Link to="/login">Click me to go to login</Link>
+            <div>
+                <div>
+                    <div className="generalnavbar">
+                        <div className="topnav">
+                            <a className="active" href="/welcome">
+                                Registration
+                            </a>
+                            <a href="#/login">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div className="welcomepage">
+                    <img
+                        className="icecream"
+                        src="/icecreamwaffels.jpeg"
+                        // alt={`${props.first} ${props.last}`}
+                    />
+                    <div className="registernav">
+                        <div id="register">
+                            <h1>Register here</h1>
+                            {/* //has to be truthy in order to see it */}
+                            {this.state.error && (
+                                <p className="error">
+                                    Oops!! something went wrong, please fill out
+                                    all the fields!
+                                </p>
+                            )}
+                            {/* //name is how it gets added to req.body => so first Name would be accessed by req.body.first */}
+                            <input
+                                type="text"
+                                name="first"
+                                placeholder="first"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <input
+                                type="text"
+                                name="last"
+                                placeholder="last"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="email"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="password"
+                                onChange={(e) => this.handleChange(e)}
+                            />
+                            <div className="container">
+                                <div className="center">
+                                    <button
+                                        className="btn"
+                                        onClick={() => this.handleClick()}
+                                    >
+                                        <svg
+                                            width="180px"
+                                            height="60px"
+                                            viewBox="0 0 180 60"
+                                            className="border"
+                                        >
+                                            <polyline
+                                                points="179,1 179,59 1,59 1,1 179,1"
+                                                className="bg-line"
+                                            />
+                                            <polyline
+                                                points="179,1 179,59 1,59 1,1 179,1"
+                                                className="hl-line"
+                                            />
+                                        </svg>
+                                        <span>register</span>
+                                    </button>
+                                </div>
+                            </div>
+                            {/* <button onClick={() => this.handleClick()}>
+                                <svg
+                                    width="180px"
+                                    height="60px"
+                                    viewBox="0 0 180 60"
+                                    className="border"
+                                >
+                                    <polyline
+                                        points="179,1 179,59 1,59 1,1 179,1"
+                                        className="bg-line"
+                                    />
+                                    <polyline
+                                        points="179,1 179,59 1,59 1,1 179,1"
+                                        className="hl-line"
+                                    />
+                                </svg>
+                                register
+                            </button> */}
+
+                            <br />
+                        </div>
                     </div>
                 </div>
             </div>
