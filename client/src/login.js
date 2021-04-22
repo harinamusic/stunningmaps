@@ -61,9 +61,7 @@ export default class Login extends Component {
                 <div>
                     <div className="generalnavbar">
                         <div className="topnav">
-                            <a className="active" href="/welcome">
-                                Registration
-                            </a>
+                            <a href="/">Registration</a>
                             <a href="#/login">Login</a>
                         </div>
                     </div>

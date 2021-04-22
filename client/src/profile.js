@@ -1,7 +1,9 @@
 import { Component } from "react";
-import { BioEditor } from "./bio-editor";
-import { FriendButton } from "./friendship";
-import { ProfilePic } from "./profile-pic";
+// import { BioEditor } from "./bio-editor";
+// import { FriendButton } from "./friendship";
+import GoogleMap from "./googlemap";
+// import { ProfilePic } from "./profile-pic";
+// import { MapContainer } from "./mapcontainer";
 
 export class Profile extends Component {
     constructor(props) {
@@ -12,23 +14,15 @@ export class Profile extends Component {
     render() {
         return (
             <div>
-                {/* <h1>
-                    Find the best icecream places nearby {this.props.first}{" "}
-                    {this.props.last}
-                </h1> */}
-                {/* <div className="info">
-                    <p>Name: {this.props.first}</p>
-                    <p>Surname: {this.props.last}</p>
-                </div> */}
-                <div>
-                    <div className="welcomepage">
-                        <img
-                            className="icecream"
-                            src="/icecreamwaffels.jpeg"
-                            // alt={`${props.first} ${props.last}`}
-                        />
-                    </div>
-                    {/* <ProfilePic
+                <div className="welcomepage">
+                    <img
+                        className="icecream"
+                        src="/icecreamwaffels.jpeg"
+                        // alt={`${props.first} ${props.last}`}
+                    />
+                    <GoogleMap />
+                </div>
+                {/* <ProfilePic
                         id={this.props.id}
                         first={this.props.first}
                         last={this.props.last}
@@ -39,13 +33,12 @@ export class Profile extends Component {
                         style={"bigpic"}
                     /> */}
 
-                    <div className="biotext">
+                {/* <div className="biotext">
                         <BioEditor
                             bio={this.props.bio}
                             setBio={this.props.setBio}
                         />
-                    </div>
-                </div>
+                    </div> */}
             </div>
         );
     }

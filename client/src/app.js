@@ -1,6 +1,6 @@
 import { Component } from "react";
 import axios from "./axios";
-import Logo from "./logo.js";
+// import Logo from "./logo.js";
 import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
 import { Profile } from "./profile";
@@ -82,19 +82,24 @@ export default class App extends Component {
             <div>
                 <div className="generalnavbar">
                     <div className="topnav">
-                        <a className="active" href="/">
-                            Home
-                        </a>
+                        <a href="/">Home</a>
                         <a href="/users">Favourites</a>
                         <a href="/friends">Ratings</a>
                         <a href="/chat">News</a>
                     </div>
                 </div>
 
-                <a id="logout" href="/logout">
+                <a className="btn" id="logout" href="/logout">
                     {" "}
                     Log out
                 </a>
+
+                {this.state.uploaderVisible && (
+                    <Uploader
+                        hideUploader={() => this.hideUploader()}
+                        addProfilePic={(newPic) => this.addProfilePic(newPic)}
+                    />
+                )}
 
                 <ProfilePic
                     // {...this.state.user}
@@ -111,18 +116,22 @@ export default class App extends Component {
                             path="/"
                             render={() => {
                                 return (
-                                    <Profile
-                                        // {...this.state.user}
-                                        id={this.state.user.id}
-                                        first={this.state.user.first}
-                                        last={this.state.user.last}
-                                        profile_pic={
-                                            this.state.user.profile_pic
-                                        }
-                                        bio={this.state.user.bio}
-                                        showUploader={() => this.showUploader()}
-                                        setBio={(text) => this.setBio(text)}
-                                    />
+                                    <div>
+                                        <Profile
+                                            // {...this.state.user}
+                                            id={this.state.user.id}
+                                            first={this.state.user.first}
+                                            last={this.state.user.last}
+                                            profile_pic={
+                                                this.state.user.profile_pic
+                                            }
+                                            bio={this.state.user.bio}
+                                            showUploader={() =>
+                                                this.showUploader()
+                                            }
+                                            setBio={(text) => this.setBio(text)}
+                                        />
+                                    </div>
                                 );
                             }}
                         />
@@ -144,13 +153,6 @@ export default class App extends Component {
                         <Route path="/chat" render={() => <Chat />} />
                     </div>
                 </BrowserRouter>
-
-                {this.state.uploaderVisible && (
-                    <Uploader
-                        hideUploader={() => this.hideUploader()}
-                        addProfilePic={(newPic) => this.addProfilePic(newPic)}
-                    />
-                )}
             </div>
         );
     }

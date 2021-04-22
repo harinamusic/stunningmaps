@@ -499,59 +499,59 @@ app.get("*", function (req, res) {
     }
 });
 
-server.listen(process.env.PORT || 3001, function () {
+app.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 ////CHANGE TO SERVER .listen
 //inside of server directory => ALL server-side code
 // SQL, db, POST, GET routes all in this directory
 
-//////////RUNS THE SECOND THE USER LOGGES IN
-io.on("connection", (socket) => {
-    console.log(`socket id ${socket.id} is now connected`);
-    //     //we only want to do sockets when a user is logged in
-    const userId = socket.request.session.userId;
-    if (!socket.request.session.userId) {
-        return socket.disconnect(true);
-    }
+// //////////RUNS THE SECOND THE USER LOGGES IN
+// io.on("connection", (socket) => {
+//     console.log(`socket id ${socket.id} is now connected`);
+//     //     //we only want to do sockets when a user is logged in
+//     const userId = socket.request.session.userId;
+//     if (!socket.request.session.userId) {
+//         return socket.disconnect(true);
+//     }
 
-    ///HERE RETRIEVE THE LAST 10 MESSAGES
-    getLastTenMsg().then((data) => {
-        // console.log(data.rows.reverse());
-        io.sockets.emit("chatMessages", data.rows.reverse());
-    });
-    // io.emit("achtung", {
-    //     warning: "This site will go offline for maintenance in one hour.",
-    // });
+//     ///HERE RETRIEVE THE LAST 10 MESSAGES
+//     getLastTenMsg().then((data) => {
+//         // console.log(data.rows.reverse());
+//         io.sockets.emit("chatMessages", data.rows.reverse());
+//     });
+//     // io.emit("achtung", {
+//     //     warning: "This site will go offline for maintenance in one hour.",
+//     // });
 
-    socket.on("newMessage", (newMsg) => {
-        // console.log("this message: ", newMsg);
-        // console.log("from user: ", userId);
+//     socket.on("newMessage", (newMsg) => {
+//         // console.log("this message: ", newMsg);
+//         // console.log("from user: ", userId);
 
-        insertMessage(userId, newMsg)
-            .then(() => {
-                getUserData(userId)
-                    .then((data) => {
-                        let infoMsg = {
-                            first: data.rows[0].first,
-                            last: data.rows[0].last,
-                            profile_pic: data.rows[0].profile_pic,
-                            message: newMsg,
-                        };
-                        io.sockets.emit("chatMessage", infoMsg);
-                    })
-                    .catch((err) => {
-                        console.log(
-                            "err in getting user data from socket.on: ",
-                            err
-                        );
-                    });
-            })
-            .catch((err) => {
-                console.log("err in inserMessage: ", err);
-            });
-    });
-});
+//         insertMessage(userId, newMsg)
+//             .then(() => {
+//                 getUserData(userId)
+//                     .then((data) => {
+//                         let infoMsg = {
+//                             first: data.rows[0].first,
+//                             last: data.rows[0].last,
+//                             profile_pic: data.rows[0].profile_pic,
+//                             message: newMsg,
+//                         };
+//                         io.sockets.emit("chatMessage", infoMsg);
+//                     })
+//                     .catch((err) => {
+//                         console.log(
+//                             "err in getting user data from socket.on: ",
+//                             err
+//                         );
+//                     });
+//             })
+//             .catch((err) => {
+//                 console.log("err in inserMessage: ", err);
+//             });
+//     });
+// });
 // io.on("connection", (socket) => {
 //     console.log(`A socket with the id ${socket.id} just CONNECTED`);
 //     socket.emit("welcome", {

@@ -18,7 +18,7 @@
 export function ProfilePic(props) {
     return (
         <section>
-            <div>
+            <div className="userpic">
                 <img
                     className={`profilepic ${props.style}`}
                     src={props.profile_pic || "/profilepic-static.jpg"}
