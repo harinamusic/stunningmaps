@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
+import {
+    GoogleMap,
+    Marker,
+    InfoWindow,
+    useLoadScript,
+} from "@react-google-maps/api";
 
 // import { LocationSearchInput } from "./placesauto";
 const options = {};
@@ -19,12 +24,23 @@ const center = {
 };
 
 export function MapContainer(props) {
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: "",
+        libraries,
+    });
+    console.log(isLoaded, loadError, "error");
     const [markers, setMarkers] = useState([]);
     var [state, setState] = useState({
         selectedPlace: {},
         activeMarker: {},
         showingInfoWindow: false,
     });
+
+    // const onMapClick = React.useCallback(() => {}, []);
+    const mapRef = React.useRef();
+    const onMapLoad = React.useCallback((map) => {
+        mapRef.current = map;
+    }, []);
 
     useEffect(() => {});
     function onMarkerClick(props, marker, e) {
@@ -50,46 +66,47 @@ export function MapContainer(props) {
                 </span>
             </h2>
 
-            <Map
-                defaultZoom={10}
-                google={props.google}
-                // onClick={this.onMapClicked}
-                options={options}
-                style={{ width: "900px", height: "900px" }}
-                containerStyle={MapContainerStyle}
-                //
-                initialCenter={initialCenter}
-                center={center}
-                zoom={15}
-                onClick={(event) => {
-                    if (state.showingInfoWindow) {
-                        setState({
-                            showingInfoWindow: false,
-                            activeMarker: null,
-                        });
-                    }
-                    console.log(event);
-                    setMarkers((current) => [
-                        ...current,
-                        {
-                            // lat: event.latLng.lat(),
-                            // lng: event.latLng.lng(),
-                            // time: new Date(),
-                        },
-                    ]);
-                }}
+            <GoogleMap
+                // defaultZoom={10}
+                // // onClick={this.onMapClicked}
+                // options={options}
+                // style={{ width: "900px", height: "900px" }}
+                // containerStyle={MapContainerStyle}
+                // //
+                // initialCenter={initialCenter}
+                // center={center}
+                // zoom={15}
+                onLoad={onMapLoad}
+                // onClick={(event) => {
+                //     if (state.showingInfoWindow) {
+                //         setState({
+                //             showingInfoWindow: false,
+                //             activeMarker: null,
+                //         });
+                //     }
+                //     console.log("my event", event);
+                //     setMarkers((current) => [
+                //         ...current,
+                //         {
+                //             // lat: event.latLng.lat(),
+                //             // lng: event.latLng.lng(),
+                //             // time: new Date(),
+                //         },
+                //     ]);
+                // }}
             >
                 <Marker
                     onClick={onMarkerClick}
                     name={"Current location"}
                     position={initialCenter}
-                    icon={{
-                        url: "/colorcone.png",
-                        scaledSize: new window.google.maps.Size(70, 70),
-                        origin: new window.google.maps.Point(),
-                    }}
+                    // icon={{
+                    //     url: "/colorcone.png",
+                    //     scaledSize: new window.google.maps.Size(70, 70),
+                    //     origin: new window.google.maps.Point(0, 0),
+                    //     anchor: new window.google.maps.Point(15, 15),
+                    // }}
                 />
-                {markers.map((marker) => (
+                {/* {markers.map((marker) => (
                     <Marker
                         key={marker.time.toISOString()}
                         position={{ lat: marker.lat, lng: marker.lng }}
@@ -97,9 +114,10 @@ export function MapContainer(props) {
                             url: "/colorcone.png",
                             scaledSize: new window.google.maps.Size(70, 70),
                             origin: new window.google.maps.Point(),
+                            anchor: new window.google.maps.Point(15, 15),
                         }}
                     />
-                ))}
+                ))} */}
                 <InfoWindow
                     marker={state.activeMarker}
                     visible={state.showingInfoWindow}
@@ -108,16 +126,16 @@ export function MapContainer(props) {
                         <h1 color="black"></h1>
                     </div>
                 </InfoWindow>
-            </Map>
+            </GoogleMap>
         </div>
     );
 }
 
-export default GoogleApiWrapper({
-    apiKey: "AIzaSyBJwyRf9DMyuZXmryChHUvwXk4SusI2I6U",
-    language: "EN",
-    libraries,
-})(MapContainer);
+// export default GoogleApiWrapper({
+//     apiKey: "AIzaSyBJwyRf9DMyuZXmryChHUvwXk4SusI2I6U",
+//     language: "EN",
+//     libraries,
+// })(MapContainer);
 
 // const [center, setCenter] = useState();
 // const { isLoaded, loadError } = useLoadScript({

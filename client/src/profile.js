@@ -1,7 +1,7 @@
 import { Component } from "react";
 // import { BioEditor } from "./bio-editor";
 // import { FriendButton } from "./friendship";
-import GoogleMap from "./google";
+import { MapContainer } from "./google";
 // import { ProfilePic } from "./profile-pic";
 // import { MapContainer } from "./mapcontainer";
 
@@ -21,7 +21,7 @@ export class Profile extends Component {
                         // alt={`${props.first} ${props.last}`}
                     />  */}
 
-                    <GoogleMap />
+                    <MapContainer />
                 </div>
                 {/* <ProfilePic
                         id={this.props.id}
