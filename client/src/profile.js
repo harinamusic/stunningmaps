@@ -1,7 +1,7 @@
 import { Component } from "react";
 // import { BioEditor } from "./bio-editor";
 // import { FriendButton } from "./friendship";
-import GoogleMap from "./googlemap";
+import GoogleMap from "./google";
 // import { ProfilePic } from "./profile-pic";
 // import { MapContainer } from "./mapcontainer";
 
@@ -15,11 +15,12 @@ export class Profile extends Component {
         return (
             <div>
                 <div className="welcomepage">
-                    <img
+                    {/* <img
                         className="icecream"
                         src="/icecreamwaffels.jpeg"
                         // alt={`${props.first} ${props.last}`}
-                    />
+                    />  */}
+
                     <GoogleMap />
                 </div>
                 {/* <ProfilePic

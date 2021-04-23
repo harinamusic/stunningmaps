@@ -78,12 +78,10 @@ body {
 }
 
 .icecream {
-    /* border-radius: 9px; */
-    /* /* width: 80%; */
-    /* height: 100%; */
-    /* height: 2000px; */
-    width: 60%;
-    object-fit: contain;
+    height: 100%;
+    width: 100%;
+
+    object-fit: cover;
     overflow: hidden;
 }
 
@@ -183,8 +181,25 @@ svg {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
+    /* border-radius: 20px; */
     border: solid black 3px;
+    height: 950px;
+    width: 1145px;
+    /* width: 60%; */
+}
+#locationsearch {
+    z-index: 10;
+}
+
+/* ////when suggestion active */
+.autocomplete-dropdown-container {
+    background-color: #fafafa;
+    cursor: pointer;
+}
+#icecreamemoji {
+    z-index: 10;
+    justify-self: left;
+    align-self: flex-start;
 }
 /* #logo {
     display: flex;
@@ -217,7 +232,7 @@ h1 {
     font-family: Georgia, "Times New Roman", Times, serif;
 }
 h2 {
-    color: white;
+    color: rgb(34, 164, 187);
 }
 .reset {
     display: flex;

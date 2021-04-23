@@ -7,6 +7,14 @@ import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 export function GoogleMap() {
     // const [buttonText, setButtonText] = useState();
     const [state, setState] = useState([]);
+     onMarkerClick(props, marker, e) {
+        console.log(props);
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true,
+        });
+    }
 
     // function handleClick() {
     //     console.log("i clicked it");

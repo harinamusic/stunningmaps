@@ -1,6 +1,16 @@
 import React, { Component } from "react";
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
-// import { Constants } from "./../../utils/constants";
+
+import {
+    Map,
+    InfoWindow,
+    Marker,
+    GoogleApiWrapper,
+    useLoadScript,
+} from "google-maps-react";
+
+import { LocationSearchInput } from "./placesauto";
+
+const options = {};
 export class MapContainer extends Component {
     constructor(props) {
         super(props);
@@ -41,51 +51,67 @@ export class MapContainer extends Component {
     render() {
         console.log("this is my state", this.state);
         return (
-            <div className="mymap">
-                <Map
-                    google={this.props.google}
-                    onClick={this.onMapClicked}
-                    // mapCenter={this.state.mapCenter}
-                    // initialCenter={this.props.coords}
-                    style={{ width: "950px", height: "700px" }}
-                    // style={{ width: "100%", height: "100%", top: "1.5rem" }}
-                    containerStyle={{ width: "110vw", height: "150vh" }}
-                    initialCenter={{
-                        lat: this.state.mapCenter.lat,
-                        lng: this.state.mapCenter.lng,
-                    }}
-                    center={{
-                        lat: this.state.mapCenter.lat,
-                        lng: this.state.mapCenter.lng,
-                    }}
-                    zoom={15}
-                >
-                    <Marker
-                        onClick={this.onMarkerClick}
-                        name={"Current location"}
-                        position={{
+            <div>
+                <div id="locationsearch">
+                    <LocationSearchInput />
+                </div>
+                <div className="mymap">
+                    <h2>
+                        Ice Cream
+                        <span role="img" aria-label="ice">
+                            {" "}
+                        </span>
+                    </h2>
+                    <Map
+                        onClick={this.onMapClick}
+                        defaultZoom={10}
+                        google={this.props.google}
+                        options={options}
+                        // mapCenter={this.state.mapCenter}
+                        // initialCenter={this.props.coords}
+                        style={{ width: "300px", height: "300px" }}
+                        // style={{ width: "100%", height: "100%", top: "1.5rem" }}
+                        containerStyle={{ width: "300px", height: "300px" }}
+                        initialCenter={{
                             lat: this.state.mapCenter.lat,
                             lng: this.state.mapCenter.lng,
                         }}
-                    />
-                    <InfoWindow
-                        marker={this.state.activeMarker}
-                        visible={this.state.showingInfoWindow}
+                        center={{
+                            lat: this.state.mapCenter.lat,
+                            lng: this.state.mapCenter.lng,
+                        }}
+                        zoom={15}
                     >
-                        <div>
-                            <h1 color="black">
-                                {this.state.selectedPlace.name}
-                            </h1>
-                        </div>
-                    </InfoWindow>
-                </Map>
+                        <Marker
+                            onClick={this.onMarkerClick}
+                            name={"Current location"}
+                            position={{
+                                lat: this.state.mapCenter.lat,
+                                lng: this.state.mapCenter.lng,
+                            }}
+                        />
+                        <InfoWindow
+                            marker={this.state.activeMarker}
+                            visible={this.state.showingInfoWindow}
+                        >
+                            <div>
+                                <h1 color="black">
+                                    {this.state.selectedPlace.name}
+                                </h1>
+                            </div>
+                        </InfoWindow>
+                    </Map>
+                </div>
             </div>
         );
     }
 }
+
+const libraries = ["places"];
 export default GoogleApiWrapper({
     apiKey: "AIzaSyBJwyRf9DMyuZXmryChHUvwXk4SusI2I6U",
     language: "EN",
+    libraries,
 })(MapContainer);
 
 // App = GoogleApiWrapper({
