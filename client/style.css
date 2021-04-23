@@ -1,6 +1,7 @@
 body {
+    background-color: black;
     margin: 0;
-    background-color: white;
+    /* background-color: white; */
     margin-top: 0;
 }
 /* header {
@@ -24,6 +25,8 @@ body {
     opacity: 1;
     overflow: hidden;
     width: 60%;
+    width: 1500px;
+    /* height: 950px; */
 }
 
 /* Style the links inside the navigation bar */
@@ -79,7 +82,7 @@ body {
 
 .icecream {
     height: 100%;
-    width: 100%;
+    width: 80%;
 
     object-fit: cover;
     overflow: hidden;
@@ -182,12 +185,19 @@ svg {
     justify-content: center;
     align-items: center;
     /* border-radius: 20px; */
-    border: solid black 3px;
+    border: solid black 1px;
+    width: 1499px;
     height: 950px;
-    width: 1145px;
     /* width: 60%; */
 }
-#locationsearch {
+.search {
+    position: absolute;
+    top: 2.9rem;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    max-width: 400px;
+
     z-index: 10;
 }
 
@@ -196,10 +206,48 @@ svg {
     background-color: #fafafa;
     cursor: pointer;
 }
-#icecreamemoji {
+#worldemoji {
     z-index: 10;
     justify-self: left;
     align-self: flex-start;
+    margin: 20px;
+}
+
+#yourplace {
+    height: 50px;
+    width: 50px;
+    z-index: 8;
+    /* position: absolute; */
+    top: 57px;
+    left: 85%;
+    object-fit: cover;
+    border: black solid 3px;
+    border-radius: 20px;
+    cursor: pointer;
+    justify-self: self-end;
+    align-items: flex-end;
+}
+.locate {
+    /* top: 2.9rem; */
+
+    /* height: 50px;
+    width: 50px; */
+    top: 52px;
+    left: 85%;
+    position: absolute;
+    border: black solid 3px;
+    border-radius: 20px;
+    justify-self: self-end;
+    align-items: flex-end;
+}
+.searchbar {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: column;
+    flex-direction: row;
+    background-color: black;
+    /* justify-content: ; */
 }
 /* #logo {
     display: flex;
@@ -232,7 +280,7 @@ h1 {
     font-family: Georgia, "Times New Roman", Times, serif;
 }
 h2 {
-    color: rgb(34, 164, 187);
+    color: white;
 }
 .reset {
     display: flex;
@@ -249,13 +297,6 @@ h2 {
     display: flex;
     flex-direction: column;
 }
-
-/* .profilepic {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-} */
 
 /* #pagelogo {
     width: 200px;
@@ -321,7 +362,7 @@ textarea {
     width: 120px;
     height: 120px;
     position: absolute;
-    right: 130px;
+    right: 50px;
     object-fit: cover;
     top: 25px;
     /* border: dotted #deaaff 5px; */
@@ -330,11 +371,11 @@ textarea {
 }
 .usernames {
     position: absolute;
-    right: 100px;
+    right: 35px;
     top: 160px;
     text-decoration: none;
 
-    color: black;
+    color: white;
 }
 /* .userpic {
     display: flex;
@@ -345,7 +386,7 @@ textarea {
 } */
 #logout {
     position: absolute;
-    right: 100px;
+    right: 15px;
     top: 180px;
     text-decoration: none;
     z-index: 4;

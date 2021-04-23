@@ -73,7 +73,7 @@ export default class Registration extends Component {
                 <div className="welcomepage">
                     <img
                         className="icecream"
-                        src="/icecreamwaffels.jpeg"
+                        src="/karte.jpeg"
                         // alt={`${props.first} ${props.last}`}
                     />
                     <div className="registernav">

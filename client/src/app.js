@@ -10,6 +10,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import FindPeople from "./findpeople";
 import Friends from "./friends";
 import Chat from "./chat";
+import { useLoadScript } from "@react-google-maps/api";
 
 export default class App extends Component {
     constructor(props) {
@@ -21,8 +22,12 @@ export default class App extends Component {
             uploaderVisible: false,
         };
     }
+
     componentDidMount() {
         console.log("app mounted");
+        // useLoadScript({
+        //     API_KEY: "AIzaSyBJwyRf9DMyuZXmryChHUvwXk4SusI2I6U",
+        // });
 
         axios.get("/user").then((res) => {
             // console.log("component mounted");

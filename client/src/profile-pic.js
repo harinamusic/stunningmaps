@@ -25,9 +25,7 @@ export function ProfilePic(props) {
                     // alt={`${props.first} ${props.last}`}
                     onClick={() => props.showUploader()}
                 />
-                {/* <p className="usernames">
-                    {props.first} {props.last}
-                </p> */}
+
                 <a className="usernames" href="/">
                     {props.first} {props.last}
                 </a>
