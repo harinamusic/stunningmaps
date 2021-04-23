@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import secrets from "../../server/secrets";
+import { BioEditor } from "./bio-editor";
 
 import {
     GoogleMap,
@@ -131,7 +132,19 @@ export function MapContainer(props) {
                         }}
                     >
                         <div>
-                            <h2>You have been here!</h2>
+                            {/* <h3>Share your experience!</h3> */}
+                            {/* <textarea
+                                v-model="title"
+                                type="text"
+                                name="title"
+                                placeholder="Your Experience"
+                            /> */}
+                            <div className="biotext">
+                                <BioEditor
+                                // bio={this.props.bio}
+                                // setBio={this.props.setBio}
+                                />
+                            </div>
                             <p>
                                 Added{" "}
                                 {formatRelative(selected.time, new Date())}

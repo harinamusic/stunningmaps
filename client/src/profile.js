@@ -1,5 +1,5 @@
 import { Component } from "react";
-// import { BioEditor } from "./bio-editor";
+import { BioEditor } from "./bio-editor";
 // import { FriendButton } from "./friendship";
 // import { GoogleMap } from "./google";
 import { MapContainer } from "./google";
@@ -36,12 +36,12 @@ export class Profile extends Component {
                         style={"bigpic"}
                     /> */}
 
-                {/* <div className="biotext">
-                        <BioEditor
-                            bio={this.props.bio}
-                            setBio={this.props.setBio}
-                        />
-                    </div> */}
+                <div className="biotext">
+                    <BioEditor
+                        bio={this.props.bio}
+                        setBio={this.props.setBio}
+                    />
+                </div>
             </div>
         );
     }

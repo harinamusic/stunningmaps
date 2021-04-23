@@ -336,7 +336,7 @@ section {
 }
 
 textarea {
-    width: 700px;
+    width: 300px;
     height: 80px;
 }
 .chat-container {
@@ -405,30 +405,31 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #c0fdff;
+    background-color: black;
     margin-top: 50px;
     padding: 20px;
-    border-radius: 20px;
-    border: dotted #deaaff 3px;
 }
 .bioeditor {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #c0fdff;
+    background-color: black;
 }
 .text {
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 2px;
-    border: dotted #deaaff 3px;
 }
 
 .biotexthere {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+.biotext {
+    height: 200px;
+    width: 400px;
 }
 
 .usersearch {
