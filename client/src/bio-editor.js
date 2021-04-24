@@ -22,7 +22,7 @@ export class BioEditor extends Component {
         console.log("i clicked add bio");
         return (
             <div className="biotexthere">
-                <button onClick={() => this.toggleEditMode()}>Add Bio</button>
+                <button onClick={() => this.toggleEditMode()}>Add</button>
             </div>
         );
     }
@@ -32,7 +32,7 @@ export class BioEditor extends Component {
             <div className="biotexthere">
                 {this.props.bio}
 
-                <button onClick={() => this.toggleEditMode()}>Edit Bio</button>
+                <button onClick={() => this.toggleEditMode()}>Edit</button>
             </div>
         );
     }
@@ -80,7 +80,7 @@ export class BioEditor extends Component {
         console.log(this.props, "is this my bio?");
         return (
             <div className="bio">
-                <h2>Your Bio</h2>
+                <h2>Add a Description</h2>
                 {this.state.editMode && (
                     <div className="bioeditor">
                         <textarea

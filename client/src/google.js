@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import secrets from "../../server/secrets";
 import { BioEditor } from "./bio-editor";
+import axios from "./axios";
 
 import {
     GoogleMap,
@@ -50,6 +51,30 @@ export function MapContainer(props) {
         activeMarker: {},
         showingInfoWindow: false,
     });
+
+    useEffect(() => {
+        //when the user opens the map -> i want to display all the markers they had placed beforehand
+        //also want to retrieve all their "bio=>descriptions"
+        axios
+            .get("/markers", setMarkers)
+            .then((res) => {
+                const newMarkers = res.data.map((item) => {
+                    return {
+                        lat: item.location_lat,
+                        lng: item.location_lng,
+                        id: item.id,
+                        bio: item.bio,
+                    };
+                });
+
+                setMarkers(newMarkers);
+
+                /////res.data is the array with the marker info
+                // this.props.setBio(res.data.bio);
+                // this.setState({ editMode: false });
+            })
+            .catch((err) => console.log("err in get /markers", err));
+    }, []);
     const onMapClick = React.useCallback((event) => {
         hideInfo();
         console.log("my event", event);
@@ -61,6 +86,7 @@ export function MapContainer(props) {
                 time: new Date(),
             },
         ]);
+        console.log(markers);
     }, []);
     const mapRef = React.useRef();
     const onMapLoad = React.useCallback((map) => {
@@ -109,21 +135,25 @@ export function MapContainer(props) {
                 onLoad={onMapLoad}
                 onClick={onMapClick}
             >
-                {markers.map((marker) => (
-                    <Marker
-                        key={marker.time.toISOString()}
-                        position={{ lat: marker.lat, lng: marker.lng }}
-                        icon={{
-                            url: "/colorcone.png",
-                            scaledSize: new window.google.maps.Size(70, 70),
-                            origin: new window.google.maps.Point(),
-                            anchor: new window.google.maps.Point(15, 15),
-                        }}
-                        onClick={() => {
-                            setSelected(marker);
-                        }}
-                    />
-                ))}
+                {markers.map((marker) => {
+                    console.log(marker, "this is marker");
+                    return (
+                        <Marker
+                            key={marker.id}
+                            position={{ lat: marker.lat, lng: marker.lng }}
+                            icon={{
+                                url: "/colorcone.png",
+                                scaledSize: new window.google.maps.Size(70, 70),
+                                origin: new window.google.maps.Point(),
+                                anchor: new window.google.maps.Point(15, 15),
+                            }}
+                            onClick={() => {
+                                setSelected(marker);
+                            }}
+                        />
+                    );
+                })}
+
                 {selected ? (
                     <InfoWindow
                         position={{ lat: selected.lat, lng: selected.lng }}
@@ -141,8 +171,8 @@ export function MapContainer(props) {
                             /> */}
                             <div className="biotext">
                                 <BioEditor
-                                // bio={this.props.bio}
-                                // setBio={this.props.setBio}
+                                    bio={props.bio}
+                                    setBio={props.setBio}
                                 />
                             </div>
                             <p>

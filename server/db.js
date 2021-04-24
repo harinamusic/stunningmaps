@@ -1,8 +1,7 @@
 const spicedPg = require("spiced-pg");
 
 const db = spicedPg(
-    process.env.DATABASE_URL ||
-        "postgres:kathi:kathi@localhost:5432/socialnetwork"
+    process.env.DATABASE_URL || "postgres:kathi:kathi@localhost:5432/apple"
 );
 module.exports.addUser = (first, last, email, password) => {
     const query = `INSERT INTO users (first, last, email, password)
@@ -51,11 +50,11 @@ module.exports.addProfilePic = function (userId, url) {
         [userId, url]
     );
 };
-module.exports.writeBio = function (userId, bio) {
-    return db.query(`UPDATE users SET bio = $2 WHERE id = $1 RETURNING bio`, [
-        userId,
-        bio,
-    ]);
+module.exports.writeBio = function (user_id, bio) {
+    return db.query(
+        `UPDATE users SET message = $2 WHERE id = $1 RETURNING bio`,
+        [user_id, bio]
+    );
 };
 
 module.exports.lastRegisteredUsers = function () {
@@ -149,3 +148,23 @@ LIMIT 3
         [id]
     );
 };
+
+module.exports.insertDescription = function (user_id, bio) {
+    return db.query(
+        `INSERT INTO markers (user_id, bio)
+        VALUES ($1, $2, $3)
+        RETURNING bio`,
+        [user_id, bio]
+    );
+};
+module.exports.getAllMarkers = function (user_id) {
+    return db.query(`SELECT * FROM markers WHERE user_id = $1`, [user_id]);
+};
+// exports.getLastTenMsg = function () {
+//     return db.query(`SELECT created.id, chatmessages.message, chatmessages.sender_id, chatmessages.created_at, users.first, users.last, users.profile_pic
+// FROM chatmessages
+// JOIN users
+// ON chatmessages.sender_id = users.id
+// ORDER BY created_at DESC
+// LIMIT 10`);
+// };

@@ -49,17 +49,19 @@ const {
     updatePassword,
     getUserData,
     addProfilePic,
-    writeBio,
-    lastRegisteredUsers,
-    matchingUsers,
-    friendshipStatus,
-    sendFriendRequest,
-    acceptFriendRequest,
-    deleteFriendship,
-    wannabeFriends,
-    getLastTenMsg,
-    insertMessage,
-    friendsOnOtherProfile,
+    // writeBio,
+    // lastRegisteredUsers,
+    // matchingUsers,
+    // friendshipStatus,
+    // sendFriendRequest,
+    // acceptFriendRequest,
+    // deleteFriendship,
+    // wannabeFriends,
+    // getLastTenMsg,
+    // insertMessage,
+    // friendsOnOtherProfile,
+    insertDescription,
+    getAllMarkers,
 } = require("./db");
 
 // const { io } = require("socket.io-client");
@@ -75,6 +77,7 @@ const {
 /////////////////////////////////USE THIS CODE INSTEAD OF ABOVE!!!!!/////////////
 /////////////IT GIVES SOCKET ACCESS TO OUR COOKIE SESSIONS///////
 const { response } = require("express");
+const { getAllByAltText } = require("@testing-library/react");
 const cookieSessionMiddleware = cookieSession({
     secret: `I'm always angry.`,
     maxAge: 1000 * 60 * 60 * 24 * 90,
@@ -286,9 +289,21 @@ app.post("/upload", uploader.single("file"), upload, (req, res) => {
     }
 });
 //////////////////////////////////BIO////////////////////////////////////
+//////////UPDATE BIO - ALSO WHERE COORDINATES FIT AND NOT JUST USER ID??????////////GET BIO?????//////
+
+// app.post("/bio", (req, res) => {
+//     writeBio(req.session.userId, req.body.bio)
+//         .then((result) => {
+//             console.log("Result in /bio: ", result.rows[0]);
+//             res.json(result.rows[0]);
+//         })
+//         .catch((err) => {
+//             console.log("Error in post/bio: ", err);
+//         });
+// });
 
 app.post("/bio", (req, res) => {
-    writeBio(req.session.userId, req.body.bio)
+    insertDescription(req.session.userId, req.body.bio)
         .then((result) => {
             console.log("Result in /bio: ", result.rows[0]);
             res.json(result.rows[0]);
@@ -297,26 +312,38 @@ app.post("/bio", (req, res) => {
             console.log("Error in post/bio: ", err);
         });
 });
-/////////////////////////////////////GET OTHER USER INFO//////////////////////////
-app.get("/user/:id.json", (req, res) => {
-    const { userId } = req.session;
-    // console.log(userId, "this is the users id i am wqanting");
-    if (userId == req.params.id) {
-        res.json({ redirectToProfile: true });
-    } else {
-        getUserData(req.params.id)
-            .then((result) => {
-                // console.log("Result  in /user: ", result);
-                // console.log("Result. rows   in /user: ", result.rows[0]);
-                // console.log("id   in /user: ", result.rows[0].id);
-                // console.log("req.params.id /user: ", req.params.id);
-                res.json(result.rows[0]);
-            })
-            .catch((err) => {
-                console.log("Error in api/user/:id: ", err);
-            });
-    }
+
+///////////////////////////////////GET MARKERS///////////////////////////////////
+
+app.get("/markers", (req, res) => {
+    getAllMarkers(req.session.userId).then((result) => {
+        console.log("Result in get /markers: ", result);
+        res.json(result.rows);
+    });
 });
+////////
+
+///////////////////////////////////POST MARKERS/////////////////////////////////
+/////////////////////////////////////GET OTHER USER INFO//////////////////////////
+// app.get("/user/:id.json", (req, res) => {
+//     const { userId } = req.session;
+//     // console.log(userId, "this is the users id i am wqanting");
+//     if (userId == req.params.id) {
+//         res.json({ redirectToProfile: true });
+//     } else {
+//         getUserData(req.params.id)
+//             .then((result) => {
+//                 // console.log("Result  in /user: ", result);
+//                 // console.log("Result. rows   in /user: ", result.rows[0]);
+//                 // console.log("id   in /user: ", result.rows[0].id);
+//                 // console.log("req.params.id /user: ", req.params.id);
+//                 res.json(result.rows[0]);
+//             })
+//             .catch((err) => {
+//                 console.log("Error in api/user/:id: ", err);
+//             });
+//     }
+// });
 // app.get("/user/:id/friends.json", (req, res) => {
 //     const friendRequestSender = req.session.userId;
 //     const friendRequestReceiver = req.params.id;
@@ -336,147 +363,147 @@ app.get("/user/:id.json", (req, res) => {
 
 /////////////////////////////////////FIND PEOPLE///////////////////////////////
 
-app.get("/lastthreeusers", (req, res) => {
-    lastRegisteredUsers()
-        .then((result) => {
-            // console.log("response in /lastusers ", result);
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("err in /lastusers ", err);
-        });
-});
+// app.get("/lastthreeusers", (req, res) => {
+//     lastRegisteredUsers()
+//         .then((result) => {
+//             // console.log("response in /lastusers ", result);
+//             res.json(result.rows);
+//         })
+//         .catch((err) => {
+//             console.log("err in /lastusers ", err);
+//         });
+// });
 
-app.get("/users/:searchusers", (req, res) => {
-    console.log(req.params.searchusers);
-    matchingUsers(req.params.searchusers)
-        .then((result) => {
-            // console.log("result in /searchusers: ", result);
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("err in /searchusers: ", err);
-        });
-});
+// app.get("/users/:searchusers", (req, res) => {
+//     console.log(req.params.searchusers);
+//     matchingUsers(req.params.searchusers)
+//         .then((result) => {
+//             // console.log("result in /searchusers: ", result);
+//             res.json(result.rows);
+//         })
+//         .catch((err) => {
+//             console.log("err in /searchusers: ", err);
+//         });
+// });
 ///////////////////////////////////////FRIEDNREQUEST///////////////////////////
-app.get("/friends/:id", (req, res) => {
-    const friendRequestSender = req.session.userId;
-    const friendRequestReceiver = req.params.id;
+// app.get("/friends/:id", (req, res) => {
+//     const friendRequestSender = req.session.userId;
+//     const friendRequestReceiver = req.params.id;
 
-    console.log(friendRequestReceiver, "this is my receiever");
-    console.log(friendRequestSender, "this is my sender");
+//     console.log(friendRequestReceiver, "this is my receiever");
+//     console.log(friendRequestSender, "this is my sender");
 
-    friendshipStatus(friendRequestReceiver, friendRequestSender)
-        .then((result) => {
-            if (result.rows == 0) {
-                res.json({
-                    setButtonText: "Add Friend",
-                });
-            } else if (result.rows[0].accepted == true) {
-                friendsOnOtherProfile(req.params.id).then((result) => {
-                    console.log(result.rows, "this is my result.rows array");
-                    const friends = result.rows.filter(
-                        (friend) => friend.id !== req.session.userId
-                    );
-                    /*...*/
-                    // res.json(friends);
-                    res.json({
-                        friends,
-                        // result,
-                        setButtonText: "Unfriend",
-                    });
-                });
-            } else if (friendRequestReceiver == result.rows[0].sender_id) {
-                res.json({
-                    setButtonText: "Accept Friend Request",
-                });
-            } else if (friendRequestReceiver !== result.rows[0].sender_id) {
-                res.json({
-                    setButtonText: "Cancel Friend Request",
-                });
-            }
-        })
+//     friendshipStatus(friendRequestReceiver, friendRequestSender)
+//         .then((result) => {
+//             if (result.rows == 0) {
+//                 res.json({
+//                     setButtonText: "Add Friend",
+//                 });
+//             } else if (result.rows[0].accepted == true) {
+//                 friendsOnOtherProfile(req.params.id).then((result) => {
+//                     console.log(result.rows, "this is my result.rows array");
+//                     const friends = result.rows.filter(
+//                         (friend) => friend.id !== req.session.userId
+//                     );
+//                     /*...*/
+//                     // res.json(friends);
+//                     res.json({
+//                         friends,
+//                         // result,
+//                         setButtonText: "Unfriend",
+//                     });
+//                 });
+//             } else if (friendRequestReceiver == result.rows[0].sender_id) {
+//                 res.json({
+//                     setButtonText: "Accept Friend Request",
+//                 });
+//             } else if (friendRequestReceiver !== result.rows[0].sender_id) {
+//                 res.json({
+//                     setButtonText: "Cancel Friend Request",
+//                 });
+//             }
+//         })
 
-        .catch((err) => {
-            console.log("Error in GET friends/:id: ", err);
-        });
-});
+//         .catch((err) => {
+//             console.log("Error in GET friends/:id: ", err);
+//         });
+// });
 
-app.post("/friendrequest/:id/:buttonText", (req, res) => {
-    const friendRequestSender = req.session.userId;
-    const friendRequestReceiver = req.params.id;
-    const buttonText = req.params.buttonText;
+// app.post("/friendrequest/:id/:buttonText", (req, res) => {
+//     const friendRequestSender = req.session.userId;
+//     const friendRequestReceiver = req.params.id;
+//     const buttonText = req.params.buttonText;
 
-    if (buttonText == "Add Friend") {
-        console.log("i am adding a new friend");
-        sendFriendRequest(friendRequestReceiver, friendRequestSender)
-            .then(() => {
-                //console.log("Result from POST friendrequest/:id: ", result);
-                res.json({
-                    setButtonText: "Cancel Friend Request",
-                });
-            })
-            .catch((err) => {
-                console.log("Error in POST friendrequest: ", err);
-            });
-    } else if (buttonText == "Accept Friend Request") {
-        acceptFriendRequest(friendRequestReceiver, friendRequestSender).then(
-            () => {
-                res.json({ setButtonText: "Unfriend" });
-            }
-        );
-    } else if (
-        buttonText == "Cancel Friend Request" ||
-        buttonText == "Unfriend"
-    ) {
-        deleteFriendship(friendRequestReceiver, friendRequestSender)
-            .then(() => {
-                //console.log("Result in /deletefriend: ", result);
-                res.json({
-                    setButtonText: "Add Friend",
-                });
-            })
-            .catch((err) => {
-                console.log("Error in /deletefriend: ", err);
-            });
-    }
-});
+//     if (buttonText == "Add Friend") {
+//         console.log("i am adding a new friend");
+//         sendFriendRequest(friendRequestReceiver, friendRequestSender)
+//             .then(() => {
+//                 //console.log("Result from POST friendrequest/:id: ", result);
+//                 res.json({
+//                     setButtonText: "Cancel Friend Request",
+//                 });
+//             })
+//             .catch((err) => {
+//                 console.log("Error in POST friendrequest: ", err);
+//             });
+//     } else if (buttonText == "Accept Friend Request") {
+//         acceptFriendRequest(friendRequestReceiver, friendRequestSender).then(
+//             () => {
+//                 res.json({ setButtonText: "Unfriend" });
+//             }
+//         );
+//     } else if (
+//         buttonText == "Cancel Friend Request" ||
+//         buttonText == "Unfriend"
+//     ) {
+//         deleteFriendship(friendRequestReceiver, friendRequestSender)
+//             .then(() => {
+//                 //console.log("Result in /deletefriend: ", result);
+//                 res.json({
+//                     setButtonText: "Add Friend",
+//                 });
+//             })
+//             .catch((err) => {
+//                 console.log("Error in /deletefriend: ", err);
+//             });
+//     }
+// });
 //////////////////////////////////FRIEND WANNABES////////////////////////////
-app.get("/friend-wannabes", (req, res) => {
-    wannabeFriends(req.session.userId).then((result) => {
-        res.json(result.rows);
-        // console.log(result.rows, "this is my result.rows in /friendwannbes");
-    });
-});
+// app.get("/friend-wannabes", (req, res) => {
+//     wannabeFriends(req.session.userId).then((result) => {
+//         res.json(result.rows);
+//         // console.log(result.rows, "this is my result.rows in /friendwannbes");
+//     });
+// });
 //////////////////////////////////////DELETE FRIEND////////////////////////////
-app.post("/deletefriend/:id", (req, res) => {
-    const friendRequestSender = req.session.userId;
-    const friendRequestReceiver = req.params.id;
-    deleteFriendship(friendRequestReceiver, friendRequestSender)
-        .then((result) => {
-            //console.log("Result in /deletefriend: ", result);
-            res.json(result);
-        })
-        .catch((err) => {
-            console.log("Error in /deletefriend: ", err);
-        });
-});
-app.post("/acceptfriend/:id", (req, res) => {
-    const friendRequestSender = req.session.userId;
-    const friendRequestReceiver = req.params.id;
-    acceptFriendRequest(friendRequestReceiver, friendRequestSender)
-        .then((result) => {
-            console.log(
-                "results, receiver from /post friends/:id",
-                result,
-                friendRequestReceiver
-            );
-            res.json(result.rows);
-        })
-        .catch((err) => {
-            console.log("err in /acceptfriend: ", err);
-        });
-});
+// app.post("/deletefriend/:id", (req, res) => {
+//     const friendRequestSender = req.session.userId;
+//     const friendRequestReceiver = req.params.id;
+//     deleteFriendship(friendRequestReceiver, friendRequestSender)
+//         .then((result) => {
+//             //console.log("Result in /deletefriend: ", result);
+//             res.json(result);
+//         })
+//         .catch((err) => {
+//             console.log("Error in /deletefriend: ", err);
+//         });
+// });
+// app.post("/acceptfriend/:id", (req, res) => {
+//     const friendRequestSender = req.session.userId;
+//     const friendRequestReceiver = req.params.id;
+//     acceptFriendRequest(friendRequestReceiver, friendRequestSender)
+//         .then((result) => {
+//             console.log(
+//                 "results, receiver from /post friends/:id",
+//                 result,
+//                 friendRequestReceiver
+//             );
+//             res.json(result.rows);
+//         })
+//         .catch((err) => {
+//             console.log("err in /acceptfriend: ", err);
+//         });
+// });
 ////////////////////////FRIENDS ON OTHER PROFILE.////////////////////
 
 ////////////////////////////////////////LOGOUT////////////////////////////////////

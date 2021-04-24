@@ -23,7 +23,10 @@ export class Profile extends Component {
                         // alt={`${props.first} ${props.last}`}
                     />  */}
 
-                    <MapContainer />
+                    <MapContainer
+                        bio={this.props.bio}
+                        setBio={this.props.setBio}
+                    />
                 </div>
                 {/* <ProfilePic
                         id={this.props.id}

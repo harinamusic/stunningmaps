@@ -2,7 +2,7 @@
 -- DROP TABLE IF EXISTS password_reset_codes;
 -- DROP TABLE IF EXISTS friendships CASCADE;
 DROP TABLE IF EXISTS chatmessages CASCADE;
-
+DROP TABLE IF EXISTS markers CASCADE;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -37,3 +37,22 @@ CREATE TABLE friendships(
   sender_id INT REFERENCES users(id) NOT NULL, 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
  );
+
+ DROP TABLE IF EXISTS markers CASCADE;
+
+ CREATE TABLE markers(
+     id SERIAL PRIMARY KEY,
+     location_lat FLOAT,
+     location_lng FLOAT,
+     bio VARCHAR(400),
+  user_id INT REFERENCES users(id) NOT NULL, 
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+ );
+
+--  CREATE TABLE comments(
+--     id SERIAL PRIMARY KEY,
+--     comments VARCHAR NOT NULL,
+--     username VARCHAR NOT NULL,
+--     img_id INTEGER NOT NULL REFERENCES images(id),
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
