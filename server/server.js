@@ -62,31 +62,32 @@ const {
     // friendsOnOtherProfile,
     insertDescription,
     getAllMarkers,
+    addMarker,
 } = require("./db");
 
 // const { io } = require("socket.io-client");
 // const { socket } = require("../client/src/socket");
 
-// app.use(
-//     cookieSession({
-//         secret: `what kind of key`,
-//         maxAge: 1000 * 60 * 60 * 24 * 14,
-//     })
-// );
+app.use(
+    cookieSession({
+        secret: `what kind of key`,
+        maxAge: 1000 * 60 * 60 * 24 * 14,
+    })
+);
 
 /////////////////////////////////USE THIS CODE INSTEAD OF ABOVE!!!!!/////////////
 /////////////IT GIVES SOCKET ACCESS TO OUR COOKIE SESSIONS///////
-const { response } = require("express");
-const { getAllByAltText } = require("@testing-library/react");
-const cookieSessionMiddleware = cookieSession({
-    secret: `I'm always angry.`,
-    maxAge: 1000 * 60 * 60 * 24 * 90,
-});
+// const { response } = require("express");
+// const { getAllByAltText } = require("@testing-library/react");
+// const cookieSessionMiddleware = cookieSession({
+//     secret: `I'm always angry.`,
+//     maxAge: 1000 * 60 * 60 * 24 * 90,
+// });
 
-app.use(cookieSessionMiddleware);
-io.use(function (socket, next) {
-    cookieSessionMiddleware(socket.request, socket.request.res, next);
-});
+// app.use(cookieSessionMiddleware);
+// io.use(function (socket, next) {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
 ///////////////////////////CSURF////////////////////////////////
 app.use(csurf());
 app.use(function (req, res, next) {
@@ -317,13 +318,25 @@ app.post("/bio", (req, res) => {
 
 app.get("/markers", (req, res) => {
     getAllMarkers(req.session.userId).then((result) => {
-        console.log("Result in get /markers: ", result);
+        // console.log("Result in get /markers: ", result);
         res.json(result.rows);
     });
 });
-////////
+////////POST MARKERS/////////////////
 
-///////////////////////////////////POST MARKERS/////////////////////////////////
+app.post("/setmarkers", (req, res) => {
+    const { lat, lng, time } = req.body;
+    console.log(req.body, "i am the body");
+    addMarker(req.session.userId, lat, lng, time)
+        .then((result) => {
+            console.log("Result in /setmarkers ", result.rows[0]);
+            res.json(result.rows[0]);
+        })
+        .catch((err) => {
+            console.log("Error in post/setmarkers ", err);
+        });
+});
+
 /////////////////////////////////////GET OTHER USER INFO//////////////////////////
 // app.get("/user/:id.json", (req, res) => {
 //     const { userId } = req.session;

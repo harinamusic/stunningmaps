@@ -160,6 +160,15 @@ module.exports.insertDescription = function (user_id, bio) {
 module.exports.getAllMarkers = function (user_id) {
     return db.query(`SELECT * FROM markers WHERE user_id = $1`, [user_id]);
 };
+
+module.exports.addMarker = (id, lat, lng, user_id, time) => {
+    const query = `INSERT INTO markers (id, location_lat, location_lng,  user_id, created_at)
+    VALUES ($1,$2, $3, $4, $5)
+    RETURNING id`;
+    const params = [id, lat, lng, user_id, time];
+    console.log(query, params);
+    return db.query(query, params);
+};
 // exports.getLastTenMsg = function () {
 //     return db.query(`SELECT created.id, chatmessages.message, chatmessages.sender_id, chatmessages.created_at, users.first, users.last, users.profile_pic
 // FROM chatmessages

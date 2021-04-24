@@ -46,9 +46,10 @@ CREATE TABLE friendships(
      location_lng FLOAT,
      bio VARCHAR(400),
   user_id INT REFERENCES users(id) NOT NULL, 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  );
 
+-- DEFAULT CURRENT_TIMESTAMP
 --  CREATE TABLE comments(
 --     id SERIAL PRIMARY KEY,
 --     comments VARCHAR NOT NULL,

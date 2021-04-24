@@ -56,9 +56,10 @@ export function MapContainer(props) {
         //when the user opens the map -> i want to display all the markers they had placed beforehand
         //also want to retrieve all their "bio=>descriptions"
         axios
-            .get("/markers", setMarkers)
+            .get("/markers")
             .then((res) => {
                 const newMarkers = res.data.map((item) => {
+                    console.log("this is the item:", item);
                     return {
                         lat: item.location_lat,
                         lng: item.location_lng,
@@ -77,7 +78,12 @@ export function MapContainer(props) {
     }, []);
     const onMapClick = React.useCallback((event) => {
         hideInfo();
-        console.log("my event", event);
+
+        console.log("my event", event.latLng.lat);
+
+        console.log(event);
+
+        console.log(markers);
         setMarkers((current) => [
             ...current,
             {
@@ -86,7 +92,15 @@ export function MapContainer(props) {
                 time: new Date(),
             },
         ]);
-        console.log(markers);
+        axios
+            .post(`/setmarkers`, {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng(),
+                time: new Date(),
+            })
+            .then((res) => {
+                console.log(res.data, "what is it");
+            });
     }, []);
     const mapRef = React.useRef();
     const onMapLoad = React.useCallback((map) => {
@@ -136,7 +150,8 @@ export function MapContainer(props) {
                 onClick={onMapClick}
             >
                 {markers.map((marker) => {
-                    console.log(marker, "this is marker");
+                    console.log(marker, "this is marker in render");
+
                     return (
                         <Marker
                             key={marker.id}
@@ -162,13 +177,6 @@ export function MapContainer(props) {
                         }}
                     >
                         <div>
-                            {/* <h3>Share your experience!</h3> */}
-                            {/* <textarea
-                                v-model="title"
-                                type="text"
-                                name="title"
-                                placeholder="Your Experience"
-                            /> */}
                             <div className="biotext">
                                 <BioEditor
                                     bio={props.bio}
