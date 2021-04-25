@@ -157,10 +157,10 @@ export function MapContainer(props) {
                             key={marker.id}
                             position={{ lat: marker.lat, lng: marker.lng }}
                             icon={{
-                                url: "/colorcone.png",
-                                scaledSize: new window.google.maps.Size(70, 70),
-                                origin: new window.google.maps.Point(),
-                                anchor: new window.google.maps.Point(15, 15),
+                                url: "/pinkheart.png",
+                                scaledSize: new window.google.maps.Size(60, 60),
+                                origin: new window.google.maps.Point(0, 0),
+                                anchor: new window.google.maps.Point(30, 30),
                             }}
                             onClick={() => {
                                 setSelected(marker);
@@ -168,7 +168,6 @@ export function MapContainer(props) {
                         />
                     );
                 })}
-
                 {selected ? (
                     <InfoWindow
                         position={{ lat: selected.lat, lng: selected.lng }}
@@ -183,10 +182,10 @@ export function MapContainer(props) {
                                     setBio={props.setBio}
                                 />
                             </div>
-                            <p>
+                            {/* <p>
                                 Added{" "}
                                 {formatRelative(selected.time, new Date())}
-                            </p>
+                            </p> */}
                         </div>
                     </InfoWindow>
                 ) : null}
@@ -212,7 +211,7 @@ function Locate({ panTo }) {
                 );
             }}
         >
-            <img id="yourplace" src="icecone.png" />
+            <img id="yourplace" src="bluelocation.png" />
         </button>
     );
 }

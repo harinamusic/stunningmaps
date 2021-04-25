@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-const server = require("http").Server(app);
-const io = require("socket.io")(server, {
-    allowRequest: (req, callback) =>
-        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
-});
+// const server = require("http").Server(app);
+// const io = require("socket.io")(server, {
+//     allowRequest: (req, callback) =>
+//         callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+// });
 const compression = require("compression");
 
 const path = require("path");
@@ -327,7 +327,7 @@ app.get("/markers", (req, res) => {
 app.post("/setmarkers", (req, res) => {
     const { lat, lng, time } = req.body;
     console.log(req.body, "i am the body");
-    addMarker(req.session.userId, lat, lng, time)
+    addMarker(lat, lng, req.session.userId, time)
         .then((result) => {
             console.log("Result in /setmarkers ", result.rows[0]);
             res.json(result.rows[0]);

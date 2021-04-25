@@ -161,11 +161,11 @@ module.exports.getAllMarkers = function (user_id) {
     return db.query(`SELECT * FROM markers WHERE user_id = $1`, [user_id]);
 };
 
-module.exports.addMarker = (id, lat, lng, user_id, time) => {
-    const query = `INSERT INTO markers (id, location_lat, location_lng,  user_id, created_at)
-    VALUES ($1,$2, $3, $4, $5)
+module.exports.addMarker = (lat, lng, user_id, time) => {
+    const query = `INSERT INTO markers ( location_lat, location_lng,  user_id, created_at)
+    VALUES ($1,$2, $3, $4)
     RETURNING id`;
-    const params = [id, lat, lng, user_id, time];
+    const params = [lat, lng, user_id, time];
     console.log(query, params);
     return db.query(query, params);
 };

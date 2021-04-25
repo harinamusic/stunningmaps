@@ -21,7 +21,7 @@ export function ProfilePic(props) {
             <div className="userpic">
                 <img
                     className={`profilepic ${props.style}`}
-                    src={props.profile_pic || "/profilepic-static.jpg"}
+                    src={props.profile_pic || "/user.png"}
                     // alt={`${props.first} ${props.last}`}
                     onClick={() => props.showUploader()}
                 />

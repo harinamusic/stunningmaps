@@ -30,18 +30,30 @@ export class Uploader extends Component {
     render() {
         return (
             <div className="uploader">
-                <div className="userinput">
-                    <button id="x" onClick={this.props.hideUploader}>
-                        X
-                    </button>
+                <button
+                    // className="btn"
+                    id="x"
+                    onClick={this.props.hideUploader}
+                >
+                    X
+                </button>
+                <div className="userinput" data-text="Select your file!">
+                    {/* <div className="inputfile"> */}
+
                     <input
-                        id="uploadInput"
+                        label="choose a file"
+                        className="inputfile"
+                        id="file"
                         type="file"
                         name="file"
                         accept="image/*"
                         onChange={(e) => this.handleChange(e)}
                     />
-                    <button onClick={(e) => this.upload(e)}>Upload</button>
+                    <label htmlFor="file">Choose a file</label>
+                    {/* </div> */}
+                    <button className="btn" onClick={(e) => this.upload(e)}>
+                        Upload
+                    </button>
                 </div>
             </div>
         );
