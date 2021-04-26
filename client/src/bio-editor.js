@@ -8,8 +8,6 @@ export class BioEditor extends Component {
         this.state = {
             error: false,
             editMode: false,
-
-            // You may want to set some defaults here
         };
     }
 
@@ -19,7 +17,6 @@ export class BioEditor extends Component {
         // To toggle the editMode state variable.
     }
     addButton() {
-        console.log("i clicked add bio");
         return (
             <div className="biotexthere">
                 <button onClick={() => this.toggleEditMode()}>Add</button>
@@ -48,15 +45,15 @@ export class BioEditor extends Component {
     }
 
     submitBio() {
-        console.log(
-            "i submitted the bio, this.state in bioeditor:",
-            this.state
-        );
         axios
-            .post("/bio", this.state)
+            .post(`/bio/${this.props.markerId}`, this.state)
             .then((res) => {
-                console.log("res in /bio", res);
-                this.props.setBio(res.data.bio);
+                // console.log("res in /bio", res);
+                this.props.updateMarkerDescription(
+                    res.data.bio,
+                    this.props.markerId
+                );
+
                 this.setState({ editMode: false });
             })
             .catch((err) => console.log("err in post /bio", err));
@@ -75,9 +72,7 @@ export class BioEditor extends Component {
         if (this.state.editMode) {
             button = undefined;
         }
-        // const { bio } = this.props;
-        // const button = bio ? this.editButton() : this.addButton();
-        console.log(this.props, "is this my bio?");
+
         return (
             <div className="bio">
                 <h2>Add a Description</h2>
@@ -96,14 +91,4 @@ export class BioEditor extends Component {
             </div>
         );
     }
-    // return (
-    //     <section id={"bio-editor"}>
-    //         {/*
-    //          Lots of rendering logic here, depending on whether:
-    //          1. You are in edit mode or not
-    //          2. If you are not in edit mode: whether a bio already exists
-    //          */}
-    //     </section>
-    // );
-    //     }
 }

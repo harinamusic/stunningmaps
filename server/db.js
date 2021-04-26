@@ -149,13 +149,11 @@ LIMIT 3
     );
 };
 
-module.exports.insertDescription = function (user_id, bio) {
-    return db.query(
-        `INSERT INTO markers (user_id, bio)
-        VALUES ($1, $2, $3)
-        RETURNING bio`,
-        [user_id, bio]
-    );
+module.exports.insertDescription = function (marker_id, bio) {
+    return db.query(`UPDATE markers SET bio = $2 WHERE id = $1 RETURNING bio`, [
+        marker_id,
+        bio,
+    ]);
 };
 module.exports.getAllMarkers = function (user_id) {
     return db.query(`SELECT * FROM markers WHERE user_id = $1`, [user_id]);
@@ -169,11 +167,11 @@ module.exports.addMarker = (lat, lng, user_id, time) => {
     console.log(query, params);
     return db.query(query, params);
 };
-// exports.getLastTenMsg = function () {
-//     return db.query(`SELECT created.id, chatmessages.message, chatmessages.sender_id, chatmessages.created_at, users.first, users.last, users.profile_pic
-// FROM chatmessages
-// JOIN users
-// ON chatmessages.sender_id = users.id
-// ORDER BY created_at DESC
-// LIMIT 10`);
-// };
+exports.deleteMarker = function (id) {
+    return db.query(
+        `DELETE FROM markers
+            WHERE (id = $1)
+            RETURNING *`,
+        [id]
+    );
+};

@@ -5,12 +5,13 @@ import { Uploader } from "./uploader";
 import { ProfilePic } from "./profile-pic";
 import { Profile } from "./profile";
 // import { BioEditor } from "./bio-editor";
-import { OtherProfile } from "./otherprofile";
+// import { AllMarkers } from "./allmarkers";
 import { BrowserRouter, Route } from "react-router-dom";
-import FindPeople from "./findpeople";
-import Friends from "./friends";
-import Chat from "./chat";
+// import FindPeople from "./findpeople";
+// import Friends from "./friends";
+// import Chat from "./chat";
 import { useLoadScript } from "@react-google-maps/api";
+import AllMarkers from "./allmarkers";
 
 export default class App extends Component {
     constructor(props) {
@@ -141,21 +142,28 @@ export default class App extends Component {
                             }}
                         />
                         <Route
-                            path="/user/:id"
+                            path="/selected/:id"
                             render={(props) => (
-                                <OtherProfile
+                                <AllMarkers
                                     key={props.match.url}
                                     match={props.match}
                                     history={props.history}
                                     style={"bigpic"}
                                     myid={this.state.user.id}
+                                    id={this.state.user.id}
+                                    first={this.state.user.first}
+                                    last={this.state.user.last}
+                                    profile_pic={this.state.user.profile_pic}
+                                    bio={this.state.user.bio}
+                                    showUploader={() => this.showUploader()}
+                                    setBio={(text) => this.setBio(text)}
                                 />
                             )}
                         />
-                        <Route path="/users" render={() => <FindPeople />} />
+                        {/* <Route path="/users" render={() => <FindPeople />} />
                         <Route path="/friends" render={() => <Friends />} />
 
-                        <Route path="/chat" render={() => <Chat />} />
+                        <Route path="/chat" render={() => <Chat />} /> */}
                     </div>
                 </BrowserRouter>
             </div>

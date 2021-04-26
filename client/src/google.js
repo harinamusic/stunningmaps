@@ -3,7 +3,9 @@ import { useState, useEffect } from "react";
 import secrets from "../../server/secrets";
 import { BioEditor } from "./bio-editor";
 import axios from "./axios";
-
+import { Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
+import AllMarkers from "./allmarkers";
 import {
     GoogleMap,
     Marker,
@@ -24,6 +26,7 @@ import {
     ComboboxOption,
 } from "@reach/combobox";
 import { formatRelative } from "date-fns";
+import { id } from "date-fns/locale";
 // import mapStyles from "./mapStyles";
 // import { LocationSearchInput } from "./placesauto";
 // const options = {};
@@ -45,6 +48,7 @@ export function MapContainer(props) {
 
     const [markers, setMarkers] = useState([]);
     const [selected, setSelected] = useState(null);
+    const [markerId, setMarkerId] = useState();
 
     var [state, setState] = useState({
         selectedPlace: {},
@@ -59,7 +63,7 @@ export function MapContainer(props) {
             .get("/markers")
             .then((res) => {
                 const newMarkers = res.data.map((item) => {
-                    console.log("this is the item:", item);
+                    // console.log("this is the item:", item);
                     return {
                         lat: item.location_lat,
                         lng: item.location_lng,
@@ -67,7 +71,7 @@ export function MapContainer(props) {
                         bio: item.bio,
                     };
                 });
-
+                // console.log(newMarkers, "this is newMarkers");
                 setMarkers(newMarkers);
 
                 /////res.data is the array with the marker info
@@ -76,14 +80,31 @@ export function MapContainer(props) {
             })
             .catch((err) => console.log("err in get /markers", err));
     }, []);
+
+    const updateMarkerDescription = (description, markerId) => {
+        // console.log("description and id in update", description, markerId);
+        const updateMarkers = markers.map((marker) => {
+            if (markerId === marker.id) {
+                console.log(marker);
+
+                marker.bio = description;
+            }
+
+            return marker;
+        });
+
+        const markerSelected = updateMarkers.filter(
+            (marker) => marker.id == markerId
+        );
+        // console.log("my selected marker in updatemarkerdescr", markerSelected);
+        setMarkers(updateMarkers);
+        setSelected(markerSelected[0]);
+        // console.log("updateMarkers after update descr", updateMarkers);
+        // this.props.setMarkers(newMarkers);
+    };
     const onMapClick = React.useCallback((event) => {
         hideInfo();
 
-        console.log("my event", event.latLng.lat);
-
-        console.log(event);
-
-        console.log(markers);
         setMarkers((current) => [
             ...current,
             {
@@ -100,8 +121,30 @@ export function MapContainer(props) {
             })
             .then((res) => {
                 console.log(res.data, "what is it");
+                setMarkerId(res.data);
+                console.log(markerId);
             });
     }, []);
+    function handleClick() {
+        console.log("i clicked it");
+        console.log(markerId, "my marker id in setmarkerid");
+        axios.post(`/deletemarker/${markerId}`).then((result) => {
+            console.log(result.data, "its the resut");
+            setState({
+                showingInfoWindow: false,
+            });
+            /////filter the array and setState to new array => filter with item.id
+            // setFriends(undefined)
+            const newMarkerset = markers.filter((item) => {
+                if (item.id !== markerId) {
+                    return item;
+                }
+            });
+
+            setMarkers(newMarkerset);
+            setSelected(null);
+        });
+    }
     const mapRef = React.useRef();
     const onMapLoad = React.useCallback((map) => {
         mapRef.current = map;
@@ -125,11 +168,6 @@ export function MapContainer(props) {
     if (!isLoaded) return "Loading maps";
     return (
         <div className="mymap">
-            {/* <img
-                className="icecream"
-                src="/icecreamwaffels.jpeg"
-                // alt={`${props.first} ${props.last}`}
-            /> */}
             <div className="searchbar">
                 <h2 id="worldemoji">
                     MAP YOUR WORLD{" "}
@@ -150,7 +188,8 @@ export function MapContainer(props) {
                 onClick={onMapClick}
             >
                 {markers.map((marker) => {
-                    console.log(marker, "this is marker in render");
+                    // console.log(marker.id, "this is marker in render");
+                    // console.log(markerId, "is it my marker id? in render");
 
                     return (
                         <Marker
@@ -164,6 +203,7 @@ export function MapContainer(props) {
                             }}
                             onClick={() => {
                                 setSelected(marker);
+                                setMarkerId(marker.id);
                             }}
                         />
                     );
@@ -178,18 +218,60 @@ export function MapContainer(props) {
                         <div>
                             <div className="biotext">
                                 <BioEditor
-                                    bio={props.bio}
+                                    bio={selected.bio}
+                                    selected={selected}
+                                    setSelected={setSelected}
                                     setBio={props.setBio}
+                                    markerId={markerId}
+                                    key={markerId}
+                                    updateMarkerDescription={
+                                        updateMarkerDescription
+                                    }
                                 />
                             </div>
                             {/* <p>
                                 Added{" "}
                                 {formatRelative(selected.time, new Date())}
                             </p> */}
+                            <Link to={"/selected/" + selected.id}>
+                                See your Memory
+                            </Link>
+                            <button
+                                id="deletemarker"
+                                className="btn"
+                                onClick={() => {
+                                    handleClick();
+                                }}
+                            >
+                                Delete Marker
+                            </button>
                         </div>
                     </InfoWindow>
                 ) : null}
             </GoogleMap>
+            <BrowserRouter>
+                <div>
+                    <Route
+                        path="/selected/:id"
+                        render={(props) => (
+                            <AllMarkers
+                                key={props.match.url}
+                                match={props.match}
+                                history={props.history}
+                                style={"bigpic"}
+                                // bio={marker.bio}
+                                selected={selected}
+                                setSelected={setSelected}
+                                setBio={props.setBio}
+                                markerId={markerId}
+                                // key={markerId}
+                                markers={markers}
+                                setMarkers={setMarkers}
+                            ></AllMarkers>
+                        )}
+                    />
+                </div>
+            </BrowserRouter>
         </div>
     );
 }

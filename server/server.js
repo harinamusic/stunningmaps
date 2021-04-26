@@ -63,7 +63,9 @@ const {
     insertDescription,
     getAllMarkers,
     addMarker,
+    deleteMarker,
 } = require("./db");
+const { id } = require("date-fns/locale");
 
 // const { io } = require("socket.io-client");
 // const { socket } = require("../client/src/socket");
@@ -303,8 +305,10 @@ app.post("/upload", uploader.single("file"), upload, (req, res) => {
 //         });
 // });
 
-app.post("/bio", (req, res) => {
-    insertDescription(req.session.userId, req.body.bio)
+app.post("/bio/:id", (req, res) => {
+    const markerId = req.params.id;
+    console.log(markerId, "this needs to be the markers id");
+    insertDescription(markerId, req.body.bio)
         .then((result) => {
             console.log("Result in /bio: ", result.rows[0]);
             res.json(result.rows[0]);
@@ -334,6 +338,21 @@ app.post("/setmarkers", (req, res) => {
         })
         .catch((err) => {
             console.log("Error in post/setmarkers ", err);
+        });
+});
+
+//
+app.post("/deletemarker/:id", (req, res) => {
+    // const friendRequestSender = req.session.userId;
+    const markerId = req.params.id;
+    console.log(markerId);
+    deleteMarker(markerId)
+        .then((result) => {
+            console.log("Result in /deletefriend: ", result.rows);
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("Error in /deletemarker: ", err);
         });
 });
 
