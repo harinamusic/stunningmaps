@@ -17,9 +17,16 @@ export class BioEditor extends Component {
         // To toggle the editMode state variable.
     }
     addButton() {
+        console.log(this.props.markerId, "is thismy marker id in bio-editor");
         return (
             <div className="biotexthere">
-                <button onClick={() => this.toggleEditMode()}>Add</button>
+                <button
+                    className="btn"
+                    id="savebtn"
+                    onClick={() => this.toggleEditMode()}
+                >
+                    Add
+                </button>
             </div>
         );
     }
@@ -29,7 +36,13 @@ export class BioEditor extends Component {
             <div className="biotexthere">
                 {this.props.bio}
 
-                <button onClick={() => this.toggleEditMode()}>Edit</button>
+                <button
+                    className="btn"
+                    id="savebtn"
+                    onClick={() => this.toggleEditMode()}
+                >
+                    Edit
+                </button>
             </div>
         );
     }
@@ -47,13 +60,15 @@ export class BioEditor extends Component {
     submitBio() {
         axios
             .post(`/bio/${this.props.markerId}`, this.state)
-            .then((res) => {
-                // console.log("res in /bio", res);
-                this.props.updateMarkerDescription(
-                    res.data.bio,
-                    this.props.markerId
-                );
 
+            .then((res) => {
+                if (this.props.updateMarkerDescription) {
+                    // console.log("res in /bio", res);
+                    this.props.updateMarkerDescription(
+                        res.data.bio,
+                        this.props.markerId
+                    );
+                }
                 this.setState({ editMode: false });
             })
             .catch((err) => console.log("err in post /bio", err));
@@ -84,7 +99,13 @@ export class BioEditor extends Component {
                             name="bio"
                             defaultValue={this.props.bio}
                         ></textarea>
-                        <button onClick={() => this.submitBio()}>Save</button>
+                        <button
+                            className="btn"
+                            id="savebtn"
+                            onClick={() => this.submitBio()}
+                        >
+                            Save
+                        </button>
                     </div>
                 )}
                 <div>{button}</div>

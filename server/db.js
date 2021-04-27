@@ -175,3 +175,6 @@ exports.deleteMarker = function (id) {
         [id]
     );
 };
+module.exports.getBioInfo = function (id) {
+    return db.query(`SELECT bio FROM markers WHERE id = $1`, [id]);
+};

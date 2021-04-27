@@ -64,6 +64,7 @@ const {
     getAllMarkers,
     addMarker,
     deleteMarker,
+    getBioInfo,
 } = require("./db");
 const { id } = require("date-fns/locale");
 
@@ -357,25 +358,22 @@ app.post("/deletemarker/:id", (req, res) => {
 });
 
 /////////////////////////////////////GET OTHER USER INFO//////////////////////////
-// app.get("/user/:id.json", (req, res) => {
-//     const { userId } = req.session;
-//     // console.log(userId, "this is the users id i am wqanting");
-//     if (userId == req.params.id) {
-//         res.json({ redirectToProfile: true });
-//     } else {
-//         getUserData(req.params.id)
-//             .then((result) => {
-//                 // console.log("Result  in /user: ", result);
-//                 // console.log("Result. rows   in /user: ", result.rows[0]);
-//                 // console.log("id   in /user: ", result.rows[0].id);
-//                 // console.log("req.params.id /user: ", req.params.id);
-//                 res.json(result.rows[0]);
-//             })
-//             .catch((err) => {
-//                 console.log("Error in api/user/:id: ", err);
-//             });
-//     }
-// });
+app.get("/selected/:id.json", (req, res) => {
+    // const { userId } = req.session;
+    // console.log(userId, "this is the users id i am wqanting");
+    getBioInfo(req.params.id)
+        .then((result) => {
+            // console.log("Result  in /user: ", result);
+            // console.log("Result. rows   in /user: ", result.rows[0]);
+            // console.log("id   in /user: ", result.rows[0].id);
+            // console.log("req.params.id /user: ", req.params.id);
+            res.json(result.rows[0]);
+        })
+        .catch((err) => {
+            console.log("Error in api/user/:id: ", err);
+        });
+});
+
 // app.get("/user/:id/friends.json", (req, res) => {
 //     const friendRequestSender = req.session.userId;
 //     const friendRequestReceiver = req.params.id;

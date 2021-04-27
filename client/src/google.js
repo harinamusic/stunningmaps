@@ -80,12 +80,23 @@ export function MapContainer(props) {
             })
             .catch((err) => console.log("err in get /markers", err));
     }, []);
+    useEffect(() => {
+        const updatedMarkers = markers.map((marker) => {
+            if (!marker.id) {
+                marker.id = markerId;
+            }
+            return marker;
+        });
+
+        setMarkers(updatedMarkers);
+        setSelected();
+    }, [markerId]);
 
     const updateMarkerDescription = (description, markerId) => {
         // console.log("description and id in update", description, markerId);
         const updateMarkers = markers.map((marker) => {
             if (markerId === marker.id) {
-                console.log(marker);
+                // console.log(marker);
 
                 marker.bio = description;
             }
@@ -99,8 +110,6 @@ export function MapContainer(props) {
         // console.log("my selected marker in updatemarkerdescr", markerSelected);
         setMarkers(updateMarkers);
         setSelected(markerSelected[0]);
-        // console.log("updateMarkers after update descr", updateMarkers);
-        // this.props.setMarkers(newMarkers);
     };
     const onMapClick = React.useCallback((event) => {
         hideInfo();
@@ -120,14 +129,12 @@ export function MapContainer(props) {
                 time: new Date(),
             })
             .then((res) => {
-                console.log(res.data, "what is it");
-                setMarkerId(res.data);
-                console.log(markerId);
+                console.log(res.data.id, "what is it");
+                setMarkerId(res.data.id);
             });
     }, []);
+
     function handleClick() {
-        console.log("i clicked it");
-        console.log(markerId, "my marker id in setmarkerid");
         axios.post(`/deletemarker/${markerId}`).then((result) => {
             console.log(result.data, "its the resut");
             setState({
@@ -166,6 +173,9 @@ export function MapContainer(props) {
 
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading maps";
+    console.log(markers, "this is markers");
+    console.log(selected, "this is selected");
+
     return (
         <div className="mymap">
             <div className="searchbar">
@@ -210,12 +220,13 @@ export function MapContainer(props) {
                 })}
                 {selected ? (
                     <InfoWindow
+                        className="infowindow"
                         position={{ lat: selected.lat, lng: selected.lng }}
                         onCloseClick={() => {
                             setSelected(null);
                         }}
                     >
-                        <div>
+                        <div className="infowindow">
                             <div className="biotext">
                                 <BioEditor
                                     bio={selected.bio}
@@ -233,8 +244,11 @@ export function MapContainer(props) {
                                 Added{" "}
                                 {formatRelative(selected.time, new Date())}
                             </p> */}
-                            <Link to={"/selected/" + selected.id}>
-                                See your Memory
+                            <Link
+                                id="markerlink"
+                                to={"/selected/" + selected.id}
+                            >
+                                Create Vision Board
                             </Link>
                             <button
                                 id="deletemarker"
@@ -249,29 +263,6 @@ export function MapContainer(props) {
                     </InfoWindow>
                 ) : null}
             </GoogleMap>
-            <BrowserRouter>
-                <div>
-                    <Route
-                        path="/selected/:id"
-                        render={(props) => (
-                            <AllMarkers
-                                key={props.match.url}
-                                match={props.match}
-                                history={props.history}
-                                style={"bigpic"}
-                                // bio={marker.bio}
-                                selected={selected}
-                                setSelected={setSelected}
-                                setBio={props.setBio}
-                                markerId={markerId}
-                                // key={markerId}
-                                markers={markers}
-                                setMarkers={setMarkers}
-                            ></AllMarkers>
-                        )}
-                    />
-                </div>
-            </BrowserRouter>
         </div>
     );
 }

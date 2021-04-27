@@ -49,11 +49,11 @@ CREATE TABLE friendships(
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  );
 
--- DEFAULT CURRENT_TIMESTAMP
---  CREATE TABLE comments(
---     id SERIAL PRIMARY KEY,
---     comments VARCHAR NOT NULL,
---     username VARCHAR NOT NULL,
---     img_id INTEGER NOT NULL REFERENCES images(id),
---     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
--- );
+
+ CREATE TABLE memories(
+    id SERIAL PRIMARY KEY,
+    img VARCHAR(255),
+    description VARCHAR NOT NULL,
+    marker_id INTEGER NOT NULL REFERENCES markers(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
